@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind & Body Harmony</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🌿 Wellness Hub</h1>
+        <p>정신, 호르몬, 육체, 습관의 완벽한 밸런스</p>
+    </header>
+
+    <main>
+        <section id="mental">
+            <h2>🧠 정신 (Mental Health)</h2>
+            <div class="card">
+                <p>소소한 성취에서 행복 찾기: "오늘 물 한 잔 마시기 성공!"</p>
+                <button onclick="playBell()">🔔 맑은 종소리 듣기</button>
+                <audio id="bellSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+            </div>
+            
+            <div class="llm-chat">
+                <h3>스트레스 대처 퀴즈 & 격려</h3>
+                <p>질문: 스트레스를 받을 때 당신의 선택은?</p>
+                <input type="text" id="userInput" placeholder="예: 산책을 다녀올래요.">
+                <button onclick="getLLMResponse()">조언 듣기</button>
+                <div id="llmResponse" class="response-box"></div>
+            </div>
+        </section>
+
+        <section id="hormone">
+            <h2>♀️ 여성 호르몬 & 대사</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>코르티솔 리듬</h3>
+                    <p>낮에는 에너지를 위해 높게, 밤에는 휴식을 위해 낮게 유지하세요.</p>
+                </div>
+                <div class="info-item">
+                    <h3>호르몬 체인</h3>
+                    <p><strong>인슐린(식단) → 코르티솔(휴식) → 수면/회복</strong> 순으로 관리해야 합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="physical">
+            <h2>💪 육체 (Physical)</h2>
+            <ul>
+                <li>거북목 방지: 30분마다 턱 당기기</li>
+                <li>자세 교정: 골반 중립 유지하기</li>
+                <li><strong>운동 후 회복:</strong> 가벼운 스트레칭과 단백질 섭취</li>
+            </ul>
+        </section>
+
+        <section id="habit">
+            <h2>📅 생활 습관 (Lifestyle)</h2>
+            <div class="habit-keywords">
+                <span>#식사</span> <span>#수면</span> <span>#운동</span> <span>#습관</span>
+            </div>
+            <p>더 큰 보상을 위해 현재의 유혹을 참아내는 <strong>인내력</strong>이 핵심입니다.</p>
+            <blockquote>"밤샘 금지! 끊어야 할 때 끊는 절제력이 당신을 만듭니다."</blockquote>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

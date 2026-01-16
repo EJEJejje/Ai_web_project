@@ -1,0 +1,69 @@
+:root {
+    --primary-color: #6b8e23;
+    --bg-color: #f9fbf7;
+    --card-bg: #ffffff;
+    --text-color: #333;
+}
+
+body {
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 40px 0;
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    color: white;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+section {
+    background: var(--card-bg);
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+h2 {
+    color: var(--primary-color);
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #556b2f;
+}
+
+.response-box {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f0f7e6;
+    border-left: 5px solid var(--primary-color);
+    min-height: 50px;
+}
+
+.habit-keywords span {
+    display: inline-block;
+    background: #e1eedd;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-right: 5px;
+    font-weight: bold;
+}
