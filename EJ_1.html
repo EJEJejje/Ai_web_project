@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>작은 성취 헬스케어</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --muted:#9fb0ffcc;
+      --text:#eaf0ff;
+      --accent:#7aa2ff;
+      --accent2:#66f0c2;
+      --warn:#ffcc66;
+      --danger:#ff6b6b;
+      --line:#2a3560;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 10%, #1b2a66 0%, rgba(27,42,102,0) 60%),
+                  radial-gradient(900px 600px at 90% 20%, #0f5b6b 0%, rgba(15,91,107,0) 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height:1.45;
+    }
+    header{
+      padding: 28px 18px 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: var(--shadow);
+    }
+    h1{margin:0; font-size: 22px; letter-spacing: -0.2px;}
+    .subtitle{margin:6px 0 0; color: var(--muted); font-size: 13px;}
+    main{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 18px 40px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background: rgba(18,26,51,.92);
+      border: 1px solid rgba(42,53,96,.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap;}
+    .row > *{flex:1}
+    input, textarea, select{
+      width:100%;
+      background:#0e1530;
+      border:1px solid rgba(42,53,96,.9);
+      border-radius: 14px;
+      padding: 11px 12px;
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height: 76px; resize: vertical;}
+    .btn{
+      border: 1px solid rgba(122,162,255,.6);
+      background: linear-gradient(180deg, rgba(122,162,255,.18), rgba(122,162,255,.10));
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: transform .05s ease, border-color .2s ease, background .2s ease;
+      user-select:none;
+    }
+    .btn:hover{border-color: rgba(102,240,194,.7)}
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{
+      border-color: rgba(159,176,255,.35);
+      background: rgba(14,21,48,.6);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 6px 10px;
+      border: 1px solid rgba(42,53,96,.85);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(14,21,48,.55);
+    }
+    .muted{color: var(--muted)}
+    .small{font-size: 12px}
+    .hr{height:1px; background: rgba(42,53,96,.7); margin: 12px 0;}
+    ul{margin:10px 0 0; padding: 0 0 0 16px}
+    li{margin: 6px 0;}
+    .ach-list{
+      list-style:none; padding:0; margin:10px 0 0;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .ach-item{
+      padding: 10px 12px;
+      border: 1px solid rgba(42,53,96,.85);
+      background: rgba(14,21,48,.55);
+      border-radius: 14px;
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    }
+    .ach-item b{font-weight:600}
+    .ach-item .time{color: var(--muted); font-size: 12px; white-space:nowrap}
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 700px){
+      .two-col{grid-template-columns:1fr}
+    }
+    .feedback{
+      border:1px solid rgba(102,240,194,.35);
+      background: rgba(102,240,194,.08);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .warn{
+      border-color: rgba(255,204,102,.4);
+      background: rgba(255,204,102,.08);
+    }
+    .danger{
+      border-color: rgba(255,107,107,.45);
+      background: rgba(255,107,107,.08);
+    }
+    .kpi{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;
+    }
+    .kpi .box{
+      flex:1;
+      min-width: 160px;
+      border:1px solid rgba(42,53,96,.85);
+      background: rgba(14,21,48,.55);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+    .kpi .num{font-size: 20px; font-weight:700}
+    .kpi .lab{color: var(--muted); font-size: 12px}
+    .quiz-card{
+      border:1px solid rgba(42,53,96,.85);
+      background: rgba(14,21,48,.55);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .choice{
+      display:flex; gap:8px; align-items:flex-start; margin: 8px 0;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(42,53,96,.7);
+      cursor:pointer;
+    }
+    .choice:hover{border-color: rgba(122,162,255,.6)}
+    .choice input{margin-top: 3px; width:auto}
+    footer{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 18px 26px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mono{font-family: var(--mono)}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>작은 성취 헬스케어</h1>
+        <p class="subtitle">
+          작은 성취 → 격려 → 지속 동기 부여
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- LEFT -->
+    <section class="card" aria-label="메인 기능">
+      <div class="row" style="align-items:center; justify-content:space-between;">
+        <h2 style="margin:0;">1) 작은 성취 기록</h2>
+        <span class="pill" title="Local/LLM 하이브리드">Local + LLM API(옵션)</span>
+      </div>
+
+      <div class="row">
+        <input id="achInput" type="text" placeholder="오늘의 작은 성취를 적어봐요.격려 해드릴게요!" />
+        <button class="btn" id="addAchBtn">추가(Add)</button>
+      </div>
+
+      <div class="two-col" style="margin-top:10px;">
+        <div>
+          <button class="btn secondary" id="encourageBtn">기록</button>
+          <button class="btn secondary" id="bellBtn">맑은 종소리</button>
+        </div>
+        <div>
+          <select id="toneSelect" aria-label="격려 톤 선택">
+            <option value="warm">따뜻한 톤(Warm)</option>
+            <option value="playful">장난기 톤(Playful)</option>
+            <option value="coach">코치 톤(Coach)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="feedback" id="encourageBox" role="status" aria-live="polite">
+        여기에 격려 멘트가 표시돼요.
+      </div>
+
+      <div class="kpi" aria-label="유지 지표(간단)">
+        <div class="box">
+          <div class="num" id="kpiCount">0</div>
+          <div class="lab">기록 개수(Count)</div>
+        </div>
+        <div class="box">
+          <div class="num" id="kpiStreak">0</div>
+          <div class="lab">연속 기록(Streak, day)</div>
+        </div>
+        <div class="box">
+          <div class="num" id="kpiToday">0</div>
+          <div class="lab">오늘 기록(Today)</div>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <h2>스트레스 해소법 & 대처 조언</h2>
+      <p class="muted small">
+        ※ 이 페이지는 교육/프로토타입이며 의료/치료 조언이 아니에요. 증상이 심하거나 오래 지속되면 전문가(의사/상담사) 도움을 권장합니다.
+      </p>
+
+      <div class="two-col">
+        <div class="card" style="padding:12px; background: rgb(20, 140, 160); border-radius:14px; border:1px solid rgba(255, 180, 0, 0.6); box-shadow:none;">
+          <b> </b>
+          <ul id="tipsList">
+            <li>4-6 호흡(Breathing): 4초 들이마시고 6초 내쉬기 × 5회</li>
+            <li>몸 스캔(Body scan): 어깨/턱 힘을 10%만 풀기</li>
+            <li>미니 산책(Mini walk): 3분만 밖을 보고 걷기</li>
+            <li>물 한 컵(Water): 한 번에 천천히 마시기</li>
+          </ul>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn secondary" id="randomTipBtn">랜덤</button>
+            <button class="btn secondary" id="breathBtn">호흡 타이머(60초)</button>
+          </div>
+          <div class="feedback warn" id="tipBox" aria-live="polite">여기에 랜덤 팁이 나와요.</div>
+        </div>
+
+        <div class="card" style="padding:12px; background: rgba(20,140,160); border-radius:14px; border:1px solid rgba(255, 180, 0, 0.6); box-shadow:none;">
+          <b>스트레스 상황별 조언</b>
+          <p class="muted small" style="margin-top:7px;">
+            “저희는 언제나 당신의 편이에요"
+          </p>
+          <textarea id="stressInput" placeholder="지금 상황을 한 줄로 적어봐요. "></textarea>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn" id="adviceBtn">조언 받기</button>
+            <button class="btn secondary" id="clearAdviceBtn">초기화</button>
+          </div>
+          <div class="feedback" id="adviceBox" aria-live="polite">여기에 조언이 표시돼요.</div>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <h2>시나리오 퀴즈(Scenario Quiz)</h2>
+      <p class="muted small">
+        정답이 있는 퀴즈(Answer-key) + 긍정 피드백(Positive feedback) 방식입니다.
+      </p>
+
+      <div id="quizArea"></div>
+      <div class="feedback" id="quizResult" aria-live="polite">퀴즈를 풀면 결과가 여기에 나와요.</div>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="card" aria-label="설정/개발 메모">
+      <h2>개발 메모(Dev Notes)</h2>
+      <p class="muted small">
+        격려 멘트는 현재 <b>로컬 룰 기반(Rule-based)</b>으로 동작합니다. 추후 Hugging Face LLM을 붙일 때는
+        아래 <span class="mono">useLLM</span> 옵션을 켜고 API 호출을 교체하세요.
+      </p>
+
+      <div class="hr"></div>
+
+      <h2>LLM 연결 방식 비교</h2>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; border-bottom:1px solid rgba(42,53,96,.7); padding:8px 6px;">방식</th>
+            <th style="text-align:left; border-bottom:1px solid rgba(42,53,96,.7); padding:8px 6px;">장점</th>
+            <th style="text-align:left; border-bottom:1px solid rgba(42,53,96,.7); padding:8px 6px;">주의</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">룰 기반<br>(Rule-based)</td>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">빠르고 안정적</td>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">표현 다양성 제한</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">LLM API<br>(Hugging Face)</td>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">자연스러운 격려, 개인화</td>
+            <td style="padding:8px 6px; border-bottom:1px solid rgba(42,53,96,.4);">토큰/비용, 안전 필터, 키 보안</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="hr"></div>
+
+      <h2>보안 팁(Security)</h2>
+      <ul class="small muted">
+        <li>API 토큰(Token)은 <b>프론트(HTML)</b>에 넣지 말고, 백엔드(Backend)에서 프록시(Proxy) 권장</li>
+        <li>민감정보(PII)는 입력하지 않도록 안내</li>
+      </ul>
+
+      <div class="hr"></div>
+
+      <h2>긴급 안내</h2>
+      <div class="feedback danger">
+        지금 매우 위험하거나 즉시 도움이 필요하다면, 가까운 응급 서비스/지역 도움 기관에 연락하세요.
+        (이 앱은 의료 응급 대응 도구가 아닙니다.)
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div>© Prototype — “정신: 김은중” (HTML/CSS/JS) · Web Audio API로 종소리 생성</div>
+  </footer>
+
+<script>
+/**
+ * 정신: 김은중 — 단일 페이지 프로토타입
+ * - Local 격려 멘트(기본)
+ * - Hugging Face LLM API(옵션): useLLM=true + callLLM() 구현 교체
+ */
+
+// -------------------------
+// State (상태)
+// -------------------------
+const state = {
+  achievements: loadJSON("achievements", []),
+  lastActiveDate: loadJSON("lastActiveDate", null),
+  streak: loadJSON("streak", 0),
+  useLLM: false, // <-- LLM을 붙이면 true로
+  // 아래는 예시용(실사용 금지): 프론트에 토큰 넣지 마세요.
+  hfEndpoint: "", // 예: "https://api-inference.huggingface.co/models/yourname/yourmodel"
+};
+
+// -------------------------
+// UI refs
+// -------------------------
+const achInput = document.getElementById("achInput");
+const addAchBtn = document.getElementById("addAchBtn");
+const encourageBtn = document.getElementById("encourageBtn");
+const bellBtn = document.getElementById("bellBtn");
+const toneSelect = document.getElementById("toneSelect");
+const encourageBox = document.getElementById("encourageBox");
+const achListEl = document.createElement("ul");
+achListEl.className = "ach-list";
+encourageBox.parentElement.insertBefore(achListEl, encourageBox.nextSibling);
+
+const kpiCount = document.getElementById("kpiCount");
+const kpiStreak = document.getElementById("kpiStreak");
+const kpiToday = document.getElementById("kpiToday");
+
+const randomTipBtn = document.getElementById("randomTipBtn");
+const breathBtn = document.getElementById("breathBtn");
+const tipBox = document.getElementById("tipBox");
+
+const stressInput = document.getElementById("stressInput");
+const adviceBtn = document.getElementById("adviceBtn");
+const clearAdviceBtn = document.getElementById("clearAdviceBtn");
+const adviceBox = document.getElementById("adviceBox");
+
+const quizArea = document.getElementById("quizArea");
+const quizResult = document.getElementById("quizResult");
+
+// -------------------------
+// Helpers
+// -------------------------
+function nowISO(){ return new Date().toISOString(); }
+function todayKey(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function formatTime(iso){
+  const d = new Date(iso);
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mm = String(d.getMinutes()).padStart(2,"0");
+  return `${todayKey()} ${hh}:${mm}`;
+}
+function saveJSON(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+function loadJSON(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+    return JSON.parse(raw);
+  }catch(e){ return fallback; }
+}
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// -------------------------
+// Streak logic (연속 기록)
+// -------------------------
+function updateStreakOnAdd(){
+  const today = todayKey();
+  const last = state.lastActiveDate;
+
+  if(!last){
+    state.streak = 1;
+  } else {
+    const lastDate = new Date(last);
+    const todayDate = new Date(today);
+    const diffDays = Math.floor((todayDate - lastDate) / (1000*60*60*24));
+    if(diffDays === 0){
+      // already counted today
+    } else if(diffDays === 1){
+      state.streak += 1;
+    } else {
+      state.streak = 1;
+    }
+  }
+  state.lastActiveDate = today;
+  saveJSON("streak", state.streak);
+  saveJSON("lastActiveDate", state.lastActiveDate);
+}
+
+// -------------------------
+// Encourage messages (격려 멘트) - Local
+// -------------------------
+const encourageTemplates = {
+  warm: [
+    "오! 그 방법 되게 나이스한데요? “{ach}” — 오늘의 나를 잘 챙겼어요.\n작은 성취가 쌓이면 큰 자신감이 돼요. 지금 페이스 그대로 가면 됩니다.",
+    "“{ach}” 했다는 건, 이미 방향을 잡았다는 뜻이에요.\n완벽이 아니라 지속(Consistency)이 핵심! 오늘도 한 칸 전진했어요.",
+    "오늘의 한 줄: “{ach}”.\n은중님, 이 정도면 충분히 잘하고 있어요. 다음은 ‘같은 크기’로 한 번 더만!"
+  ],
+  playful: [
+    "오케이! “{ach}” 달성!\n이건 ‘레벨업 경험치’가 확실히 쌓이는 행동입니다. 🎮",
+    "“{ach}”라니… 오늘의 MVP는 은중님.\n내일의 나: “와, 고마워.”",
+    "오! 그 방법 되게 나이스한데요?\n“{ach}” → (두둥) ‘자기효능감(Self-efficacy)’ 상승!"
+  ],
+  coach: [
+    "좋습니다. “{ach}”는 ‘실행(Action)’이 들어간 기록이에요.\n다음 목표는 작게: 1) 같은 행동 2) 더 짧게 3) 더 쉽게. 유지(Adherence)를 최우선!",
+    "“{ach}” 완료.\n오늘의 포인트: ‘시작했는가’가 전부입니다. 내일도 60초만이라도 다시 해봅시다.",
+    "오! 그 방법 되게 나이스한데요?\n이걸 루틴(Routine)으로 만들려면: 트리거(Trigger) 하나만 정하세요. 예: 식후 3분."
+  ]
+};
+
+function buildEncourageLocal(latestAch, tone){
+  const t = encourageTemplates[tone] ? tone : "warm";
+  const msg = pick(encourageTemplates[t]).replaceAll("{ach}", latestAch || "작은 행동 하나");
+  const extra = "\n\n✅ 오늘의 제안: ‘너무 작게’ 설정해도 됩니다. (예: 30초 정리, 물 3모금)";
+  return msg + extra;
+}
+
+// -------------------------
+// Advice (스트레스 대처) - Local
+// -------------------------
+function buildAdviceLocal(text){
+  const basePositive = "오! 그 방법 되게 나이스한데요? 지금 이렇게 ‘상황을 말로 정리’한 것부터 이미 큰 진전이에요.\n";
+  const normalized = (text || "").trim();
+  if(!normalized){
+    return basePositive + "한 줄만 더 적어줘요. 예: “무엇 때문에/언제/어떤 느낌인지”";
+  }
+
+  // Simple pattern routing (매우 단순한 룰 기반)
+  const lower = normalized.toLowerCase();
+
+  const modules = [];
+
+  // 1) validation (정서 확인)
+  modules.push("1) 감정 라벨링(Emotion labeling): 지금 느끼는 감정을 ‘한 단어’로 붙여봐요. 예: 불안/긴장/짜증/무기력");
+
+  // 2) action (행동)
+  if(lower.includes("발표") || lower.includes("시험") || lower.includes("면접")){
+    modules.push("2) 10분 계획(10-minute plan):\n- 3분: 할 일 3개만 적기\n- 5분: 가장 쉬운 1개만 시작\n- 2분: 다음 행동을 ‘내일/오늘’로 예약");
+  } else if(lower.includes("관계") || lower.includes("친구") || lower.includes("가족") || lower.includes("상사")){
+    modules.push("2) 경계 설정(Boundary):\n- ‘사실(Fact)’과 ‘해석(Interpretation)’을 분리\n- 요청 문장 템플릿: “지금은 어려워요. 대신 (대안)을 할게요.”");
+  } else {
+    modules.push("2) 즉시 완화(Immediate relief): 4-6 호흡 5회 + 어깨 힘 10% 빼기 + 물 한 컵");
+  }
+
+  // 3) reframe (재구성)
+  modules.push("3) 재구성(Reframe): “지금 이 스트레스는 내가 중요하게 여기는 것(가치, Value)이 있다는 신호”라고 해석해도 좋아요.");
+
+  // 4) safety note
+  modules.push("4) 참고(Notice): 불면/공황/우울이 2주 이상 지속되거나 일상 기능이 크게 떨어지면 전문가 상담을 권장합니다.");
+
+  return (
+    basePositive +
+    `\n📌 당신의 상황: “${normalized}”\n\n` +
+    modules.join("\n\n")
+  );
+}
+
+// -------------------------
+// Tips (랜덤 팁)
+// -------------------------
+const tips = [
+  "오! 그 방법 되게 나이스한데요? 지금은 4-6 호흡(Breathing) 5회만 해도 충분합니다.",
+  "눈을 창밖으로 20초만 두세요. 시야를 ‘멀리’ 두면 긴장이 내려갑니다.",
+  "손바닥 마찰 10초 + 따뜻한 감각 느끼기(grounding). 지금-여기에 붙는 연습이에요.",
+  "할 일을 ‘1분 버전’으로 줄여보세요. 시작이 곧 승리입니다.",
+  "스트레스는 ‘에너지’일 때가 많아요. 30초 스트레칭으로 배출해봅시다."
+];
+
+function startBreathTimer(){
+  const total = 60; // seconds
+  let t = 0;
+  tipBox.textContent = "호흡 시작! 4초 들이마시고 6초 내쉬기. (총 60초)";
+  const id = setInterval(()=>{
+    t++;
+    const remain = total - t;
+    if(remain <= 0){
+      clearInterval(id);
+      tipBox.textContent = "끝! 오! 그 방법 되게 나이스한데요? 지금 상태가 ‘조금’만 더 나아졌으면 성공입니다.";
+    }
+  }, 1000);
+}
+
+// -------------------------
+// Web Audio Chime (종소리)
+// -------------------------
+let audioCtx = null;
+function playChime(){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = audioCtx.currentTime;
+
+    // 3 partials for a simple bell-like sound
+    const freqs = [880, 1320, 1760];
+    freqs.forEach((f, i)=>{
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(f, t0);
+
+      // envelope
+      const start = t0 + i*0.01;
+      g.gain.setValueAtTime(0.0001, start);
+      g.gain.exponentialRampToValueAtTime(0.25/(i+1), start + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + 1.3);
+
+      o.connect(g).connect(audioCtx.destination);
+      o.start(start);
+      o.stop(start + 1.35);
+    });
+  }catch(e){
+    alert("종소리 재생이 브라우저에서 차단될 수 있어요. 버튼을 한 번 더 눌러보세요.");
+  }
+}
+
+// -------------------------
+// Quiz (시나리오 퀴즈)
+// -------------------------
+const quiz = [
+  {
+    q: "내일 발표가 있는데 불안해서 아무것도 못 하겠어요. 첫 행동으로 가장 좋은 건?",
+    a: [
+      { text: "완벽한 자료를 한 번에 끝내려고 밤새기", ok:false,
+        why:"열심 의지는 최고예요! 다만 수면 부족은 불안을 더 키울 수 있어요. ‘작게 시작’이 더 효율적입니다." },
+      { text: "3분만에 할 일 3개를 적고, 가장 쉬운 1개를 5분만 시작하기", ok:true,
+        why:"오! 그 방법 되게 나이스한데요? 불안을 ‘행동’으로 바꾸는 최고의 스타트입니다." },
+      { text: "불안이 사라질 때까지 아무것도 안 하고 기다리기", ok:false,
+        why:"기다리는 것도 자기보호일 수 있어요. 다만 불안은 ‘행동 후’ 줄어드는 경우가 많아요." }
+    ]
+  },
+  {
+    q: "스트레스 때문에 자꾸 스마트폰을 계속 보게 돼요. 대안으로 더 좋은 선택은?",
+    a: [
+      { text: "폰을 아예 없애기(극단적으로 차단)", ok:false,
+        why:"결단력은 멋져요! 그런데 지속(Adherence)이 어렵다면 반동이 올 수 있어요." },
+      { text: "‘2분만’ 폰 내려놓고 물 마시기 + 어깨 힘 10% 빼기", ok:true,
+        why:"오! 그 방법 되게 나이스한데요? 작고 구체적이라 꾸준히 유지하기 좋습니다." },
+      { text: "자책하면서 더 의지로 버티기", ok:false,
+        why:"의지도 중요하지만, 자책은 회복을 방해해요. ‘환경/행동’ 조정이 더 안전합니다." }
+    ]
+  },
+  {
+    q: "상대가 나를 무시한 것 같아 화가 나요. 가장 건강한 첫 대응은?",
+    a: [
+      { text: "즉시 따지며 공격적으로 말하기", ok:false,
+        why:"감정이 강할수록 즉시 반응하고 싶죠. 다만 관계 비용이 커질 수 있어요." },
+      { text: "사실(Fact)과 해석(Interpretation)을 분리해 적고, 차분할 때 요청을 말하기", ok:true,
+        why:"오! 그 방법 되게 나이스한데요? 감정을 존중하면서도 관계를 지키는 방식입니다." },
+      { text: "아무 말도 안 하고 계속 참기", ok:false,
+        why:"참는 것도 전략일 수 있어요. 다만 장기적으로는 경계(Boundary) 표현이 필요할 수 있어요." }
+    ]
+  }
+];
+
+function renderQuiz(){
+  quizArea.innerHTML = "";
+  quiz.forEach((item, idx)=>{
+    const wrap = document.createElement("div");
+    wrap.className = "quiz-card";
+
+    const title = document.createElement("div");
+    title.innerHTML = `<b>Q${idx+1}.</b> ${item.q}`;
+    wrap.appendChild(title);
+
+    item.a.forEach((c, j)=>{
+      const label = document.createElement("label");
+      label.className = "choice";
+      label.innerHTML = `
+        <input type="radio" name="q${idx}" value="${j}" />
+        <div>${c.text}</div>
+      `;
+      label.addEventListener("click", ()=>{
+        const radios = wrap.querySelectorAll(`input[name="q${idx}"]`);
+        radios.forEach(r => r.checked = false);
+        label.querySelector("input").checked = true;
+        showQuizResult();
+      });
+      wrap.appendChild(label);
+    });
+
+    quizArea.appendChild(wrap);
+  });
+}
+
+function showQuizResult(){
+  let answered = 0;
+  let correct = 0;
+  let out = [];
+
+  quiz.forEach((item, idx)=>{
+    const pickedEl = document.querySelector(`input[name="q${idx}"]:checked`);
+    if(!pickedEl) return;
+    answered++;
+    const pickIdx = Number(pickedEl.value);
+    const choice = item.a[pickIdx];
+    if(choice.ok) correct++;
+
+    const mark = choice.ok ? "✅" : "🟡";
+    out.push(`${mark} Q${idx+1}: ${choice.why}`);
+  });
+
+  if(answered === 0){
+    quizResult.textContent = "아직 선택한 답이 없어요. 하나만 골라도 좋아요!";
+    return;
+  }
+
+  const score = Math.round((correct / quiz.length) * 100);
+  // “무조건 긍정” 톤: 점수도 압박 없이 안내
+  quizResult.textContent =
+    `오! 그 방법 되게 나이스한데요?\n` +
+    `진행: ${answered}/${quiz.length} · 정답(Recommended) 선택: ${correct}\n` +
+    `체감 점수(Score): ${score}점 (점수는 참고용!)\n\n` +
+    out.join("\n\n");
+}
+
+// -------------------------
+// Achievements UI
+// -------------------------
+function addAchievement(text){
+  const t = (text || "").trim();
+  if(!t) return;
+
+  state.achievements.unshift({ text: t, at: nowISO(), day: todayKey() });
+  saveJSON("achievements", state.achievements);
+
+  updateStreakOnAdd();
+  renderAchievements();
+  updateKPIs();
+
+  achInput.value = "";
+  encourageBox.textContent = buildEncourageLocal(t, toneSelect.value);
+}
+
+function renderAchievements(){
+  achListEl.innerHTML = "";
+  const items = state.achievements.slice(0, 12);
+  items.forEach((it, idx)=>{
+    const li = document.createElement("li");
+    li.className = "ach-item";
+    li.innerHTML = `
+      <div>
+        <b>${escapeHTML(it.text)}</b>
+        <div class="muted small">클릭하면 격려를 다시 받을 수 있어요.</div>
+      </div>
+      <div class="time">${formatTime(it.at)}</div>
+    `;
+    li.addEventListener("click", ()=>{
+      encourageBox.textContent = buildEncourageLocal(it.text, toneSelect.value);
+      playChime();
+    });
+
+    // delete button (optional)
+    const del = document.createElement("button");
+    del.className = "btn secondary";
+    del.style.padding = "8px 10px";
+    del.textContent = "삭제";
+    del.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      state.achievements.splice(state.achievements.indexOf(it), 1);
+      saveJSON("achievements", state.achievements);
+      renderAchievements();
+      updateKPIs();
+      encourageBox.textContent = "삭제 완료! 오! 그 방법 되게 나이스한데요? 정리하는 것도 훌륭한 성취입니다.";
+    });
+    li.appendChild(del);
+
+    achListEl.appendChild(li);
+  });
+}
+
+function updateKPIs(){
+  kpiCount.textContent = state.achievements.length;
+
+  // today count
+  const tk = todayKey();
+  const todayCount = state.achievements.filter(x => x.day === tk).length;
+  kpiToday.textContent = todayCount;
+
+  // streak
+  kpiStreak.textContent = state.streak || 0;
+}
+
+function escapeHTML(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+
+// -------------------------
+// Optional: Hugging Face LLM (옵션)
+// -------------------------
+async function callLLM(promptText){
+  // ✅ 권장: 백엔드(Backend)에서 토큰 관리 + 프록시(Proxy)
+  // 여기서는 구조만 남겨둡니다.
+  if(!state.hfEndpoint){
+    throw new Error("HF endpoint가 설정되지 않았습니다.");
+  }
+
+  // 예시 스켈레톤(프론트 토큰 금지):
+  // const res = await fetch("/api/encourage", { method:"POST", headers:{...}, body: JSON.stringify({prompt: promptText}) });
+  // const data = await res.json();
+  // return data.text;
+
+  // 임시:
+  return "LLM 응답(placeholder): 오! 그 방법 되게 나이스한데요?";
+}
+
+// -------------------------
+// Events
+// -------------------------
+addAchBtn.addEventListener("click", ()=> addAchievement(achInput.value));
+achInput.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") addAchievement(achInput.value);
+});
+
+encourageBtn.addEventListener("click", async ()=>{
+  const latest = state.achievements[0]?.text || achInput.value.trim();
+  const tone = toneSelect.value;
+
+  if(!latest){
+    encourageBox.textContent = "성취가 비어 있어요. 한 줄만 적어줘요! 예: “물 한 컵 마심”";
+    return;
+  }
+
+  if(state.useLLM){
+    try{
+      const prompt = `한국어로, 매우 짧고 따뜻하게 격려해줘. 사용자의 작은 성취: "${latest}". 톤: ${tone}. "오! 그 방법 되게 나이스한데요?" 문장을 포함해줘.`;
+      const llm = await callLLM(prompt);
+      encourageBox.textContent = llm;
+    }catch(err){
+      encourageBox.textContent = "LLM 호출 실패 → 로컬 격려로 대체합니다.\n\n" + buildEncourageLocal(latest, tone);
+    }
+  } else {
+    encourageBox.textContent = buildEncourageLocal(latest, tone);
+  }
+  playChime();
+});
+
+bellBtn.addEventListener("click", ()=> playChime());
+
+randomTipBtn.addEventListener("click", ()=>{
+  tipBox.textContent = pick(tips);
+  playChime();
+});
+
+breathBtn.addEventListener("click", ()=> startBreathTimer());
+
+adviceBtn.addEventListener("click", async ()=>{
+  const text = stressInput.value;
+
+  if(state.useLLM){
+    try{
+      const prompt = `한국어로, 안전하고 실용적인 스트레스 대처 조언을 4단계로 제시해줘. "무조건 긍정" 톤이되, 더 나은 대안을 부드럽게 안내해줘. 상황: "${text}". "오! 그 방법 되게 나이스한데요?" 포함.`;
+      const llm = await callLLM(prompt);
+      adviceBox.textContent = llm;
+    }catch(err){
+      adviceBox.textContent = "LLM 호출 실패 → 로컬 조언으로 대체합니다.\n\n" + buildAdviceLocal(text);
+    }
+  } else {
+    adviceBox.textContent = buildAdviceLocal(text);
+  }
+  playChime();
+});
+
+clearAdviceBtn.addEventListener("click", ()=>{
+  stressInput.value = "";
+  adviceBox.textContent = "초기화 완료! 오! 그 방법 되게 나이스한데요? 정리하는 것도 회복의 한 부분이에요.";
+});
+
+// -------------------------
+// Init
+// -------------------------
+renderAchievements();
+updateKPIs();
+renderQuiz();
+showQuizResult();
+</script>
+</body>
+</html>
+
