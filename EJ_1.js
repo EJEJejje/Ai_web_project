@@ -54,7 +54,7 @@ const state = {
     hfEndpoint: "",
     hfToken: "",
     temperature: 0.7,
-    max_new_tokens: 160
+    max_new_tokens: 1000 // JSON 응답을 위해 토큰 수 늘림
   })
 };
 
@@ -91,8 +91,8 @@ const quizResult = document.getElementById("quizResult");
 // Settings UI
 const modeSelect = document.getElementById("modeSelect");
 const proxyUrlInput = document.getElementById("proxyUrlInput");
-const hfEndpointInput = document.getElementById("hfEndpointInput");
-const hfTokenInput = document.getElementById("hfTokenInput");
+// const hfEndpointInput = document.getElementById("hfEndpointInput"); // Removed
+// const hfTokenInput = document.getElementById("hfTokenInput"); // Removed
 const saveCfgBtn = document.getElementById("saveCfgBtn");
 const testCfgBtn = document.getElementById("testCfgBtn");
 const llmStatusBox = document.getElementById("llmStatusBox");
@@ -103,9 +103,10 @@ const llmStatusBox = document.getElementById("llmStatusBox");
 function promptEncourage(ach, tone){
   return [
     "너는 멘탈 웰니스 코치(mental wellness coach)야.",
+    "자기소개 금지",
     "아래 사용자의 '작은 성취'에 대해 짧고 따뜻한 격려를 한국어로 작성해줘.",
     "조건:",
-    "- 반드시 “오! 그 방법 되게 나이스한데요?” 문장을 포함",
+    
     "- 3~5문장",
     "- 톤은 사용자가 고른 tone에 맞게: warm/playful/coach",
     "- 의료 진단/치료 조언 금지, 위기 대응이 필요해 보이면 '전문가 도움 권장'을 부드럽게 한 줄 추가",
@@ -118,11 +119,11 @@ function promptEncourage(ach, tone){
 function promptTip(){
   return [
     "너는 멘탈 웰니스 코치야.",
+    "자기소개 금지",
     "사용자에게 지금 당장 할 수 있는 '스트레스 완화 팁'을 한국어로 1개만 제시해줘.",
     "조건:",
     "- 1~2문장",
     "- 과장 금지, 의료 진단/치료 언급 금지",
-    "- '오! 그 방법 되게 나이스한데요?'를 문장 어딘가에 포함",
     "- 구체적 행동(예: 호흡, 스트레칭, 짧은 정리 등) 위주"
   ].join("\n");
 }
@@ -130,9 +131,9 @@ function promptTip(){
 function promptAdvice(situation){
   return [
     "너는 멘탈 웰니스 코치야.",
+    "자기소개 금지",
     "사용자의 상황에 대해 안전하고 실용적인 대처 조언을 한국어로 작성해줘.",
     "조건:",
-    "- '오! 그 방법 되게 나이스한데요?' 포함",
     "- 4단계(step)로 번호를 매겨 제시",
     "- 각 단계는 1~2문장으로 짧게",
     "- 의료 진단/치료 조언 금지, 위험 신호가 있으면 전문가 도움 권장 1줄",
@@ -141,14 +142,30 @@ function promptAdvice(situation){
   ].join("\n");
 }
 
+function promptDailyQuiz(){
+  return [
+    "너는 멘탈 웰니스 코치야.",
+    "자기소개 금지",
+    "일상 생활에서 겪을 수 있는 스트레스 상황이나 대인관계 시나리오를 3개 생성하고, 각 상황에 대한 객관식 퀴즈(선택지 3개)를 만들어줘.",
+    "조건:",
+    "- 출력은 오직 JSON 포맷이어야 함 (마크다운 코드블록 없이 순수 JSON text)",
+    "- JSON 형식: [ { \"q\": \"지문\", \"a\": [\"선택1\", \"선택2\", \"선택3\"] }, ... ]",
+    "- 문제 3개 필수",
+    "- 한국어 작성",
+    "- 내용은 직장인나 현대인이 겪을법한 일상적인 스트레스 상황",
+    "- 선택지는: 1) 공격적/충동적 반응(안 좋은 예), 2) 건전하고 지혜로운 대처(정답), 3) 회피/무시(좋지 않은 예) 순서 섞어서",
+    "- 의료적 진단이 필요한 심각한 상황은 제외"
+  ].join("\n");
+}
+
 function promptQuizFeedback(question, choices, pickedIndex){
   const choiceLines = choices.map((c, i)=> `${i+1}) ${c}`).join("\n");
   return [
     "너는 멘탈 웰니스 코치야.",
+    "자기소개 금지",
     "아래 시나리오 퀴즈에서 사용자가 고른 선택을 평가하고, 더 도움이 되는 '추천 선택지'를 제시해줘.",
     "조건:",
     "- 한국어",
-    "- '오! 그 방법 되게 나이스한데요?' 포함",
     "- 출력 형식은 반드시 아래 3줄을 포함:",
     "  1) 사용자의 선택: (번호)",
     "  2) 추천 선택: (번호) — 이유 1~2문장",
@@ -374,32 +391,79 @@ function startBreathTimer(){
 // -------------------------
 // Quiz (LLM 판정)
 // -------------------------
-const quiz = [
-  {
-    q: "내일 발표가 있는데 불안해서 아무것도 못 하겠어요. 첫 행동으로 가장 좋은 건?",
-    a: [
-      "완벽한 자료를 한 번에 끝내려고 밤새기",
-      "3분만에 할 일 3개를 적고, 가장 쉬운 1개를 5분만 시작하기",
-      "불안이 사라질 때까지 아무것도 안 하고 기다리기"
-    ]
-  },
-  {
-    q: "스트레스 때문에 자꾸 스마트폰을 계속 보게 돼요. 대안으로 더 좋은 선택은?",
-    a: [
-      "폰을 아예 없애기(극단적으로 차단)",
-      "‘2분만’ 폰 내려놓고 물 마시기 + 어깨 힘 10% 빼기",
-      "자책하면서 더 의지로 버티기"
-    ]
-  },
-  {
-    q: "상대가 나를 무시한 것 같아 화가 나요. 가장 건강한 첫 대응은?",
-    a: [
-      "즉시 따지며 공격적으로 말하기",
-      "사실(Fact)과 해석(Interpretation)을 분리해 적고, 차분할 때 요청을 말하기",
-      "아무 말도 안 하고 계속 참기"
-    ]
+// 초기엔 null, 로드 후 업데이트
+let quiz = [];
+
+async function loadDailyQuiz(){
+  const today = todayKey();
+  const cachedKey = `dailyQuiz_${today}`;
+  const cached = localStorage.getItem(cachedKey);
+
+  if(cached){
+    try{
+      quiz = JSON.parse(cached);
+      if(Array.isArray(quiz) && quiz.length > 0){
+        renderQuiz();
+        return;
+      }
+    }catch(e){
+      console.error("Quiz parsing error", e);
+    }
   }
-];
+
+  // 없으면 생성 버튼 표시
+  quizArea.innerHTML = `
+    <div class="notice-box" style="text-align:center; padding:20px; background:#f5f5f5; border-radius:8px;">
+      <p>오늘의 퀴즈가 아직 없습니다.</p>
+      <button class="btn primary" id="genQuizBtn">오늘의 퀴즈 생성하기 (LLM)</button>
+    </div>
+  `;
+  
+  // 동적으로 생성된 버튼이므로 여기서 이벤트 바인딩
+  const btn = document.getElementById("genQuizBtn");
+  if(btn){
+    btn.addEventListener("click", generateDailyQuiz);
+  }
+}
+
+async function generateDailyQuiz(){
+  const btn = document.getElementById("genQuizBtn");
+  if(btn) btn.disabled = true;
+  if(quizArea) quizArea.innerHTML = `<div class="feedback">오늘의 시나리오를 생성하고 있어요... (시간이 조금 걸릴 수 있습니다)</div>`;
+  
+  try{
+    const prompt = promptDailyQuiz();
+    let text = await callLLMText(prompt);
+    
+    // JSON 파싱 시도 (LLM이 마크다운 ```json ... ``` 을 줄 수도 있으므로 처리)
+    text = text.trim();
+    if(text.startsWith("```json")) text = text.replace(/^```json/, "");
+    if(text.startsWith("```")) text = text.replace(/^```/, "");
+    if(text.endsWith("```")) text = text.replace(/```$/, "");
+    
+    const parsed = JSON.parse(text);
+    if(!Array.isArray(parsed)){
+      throw new Error("JSON 형식이 배열이 아닙니다.");
+    }
+    
+    // 저장 및 렌더링
+    quiz = parsed;
+    const today = todayKey();
+    localStorage.setItem(`dailyQuiz_${today}`, JSON.stringify(quiz));
+    renderQuiz();
+    
+    playChime();
+    
+  }catch(err){
+    console.error(err);
+    quizArea.innerHTML = `
+      <div class="feedback danger">
+        퀴즈 생성 실패: ${err.message}<br>
+        <button class="btn secondary" onclick="loadDailyQuiz()">다시 시도</button>
+      </div>
+    `;
+  }
+}
 
 function renderQuiz(){
   quizArea.innerHTML = "";
@@ -448,14 +512,14 @@ function renderQuiz(){
 function syncSettingsToUI(){
   modeSelect.value = state.llm.mode;
   proxyUrlInput.value = state.llm.proxyUrl || "";
-  hfEndpointInput.value = state.llm.hfEndpoint || "";
-  hfTokenInput.value = state.llm.hfToken || "";
+  // hfEndpointInput.value = state.llm.hfEndpoint || "";
+  // hfTokenInput.value = state.llm.hfToken || "";
 }
 function saveSettingsFromUI(){
   state.llm.mode = modeSelect.value;
   state.llm.proxyUrl = proxyUrlInput.value.trim();
-  state.llm.hfEndpoint = hfEndpointInput.value.trim();
-  state.llm.hfToken = hfTokenInput.value.trim();
+  // state.llm.hfEndpoint = hfEndpointInput.value.trim();
+  // state.llm.hfToken = hfTokenInput.value.trim();
   saveJSON("llmConfig", state.llm);
 }
 
@@ -543,4 +607,5 @@ clearAdviceBtn.addEventListener("click", ()=>{
 syncSettingsToUI();
 renderAchievements();
 updateKPIs();
-renderQuiz();
+renderQuiz(); // 빈 상태 혹은 로딩 상태
+loadDailyQuiz(); // 체크 시작

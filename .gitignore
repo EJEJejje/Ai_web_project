@@ -7,10 +7,9 @@ Thumbs.db
 .vscode/
 !.vscode/settings.json
 !.vscode/extensions.json
-
+.env
 .idea/
 *.iml
-
 # =========================
 # Python (파이썬)
 # =========================
@@ -56,3 +55,6 @@ out/
 # =========================
 *.pem
 *.key
+
+# Server files (not for Git)
+server.py

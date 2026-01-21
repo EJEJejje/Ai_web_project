@@ -6,7 +6,6 @@
   <title>작은 성취 헬스케어 (LLM Only)</title>
   <link rel="stylesheet" href="EJ_1.css">
 </head>
-
 <body>
   <header>
     <div class="brand">
@@ -17,7 +16,6 @@
       </div>
     </div>
   </header>
-
   <main class="grid">
     <!-- LEFT -->
     <section class="card" aria-label="메인 기능">
@@ -25,12 +23,10 @@
         <h2 style="margin:0;">1) 작은 성취 기록 & 격려</h2>
         <span class="pill" title="LLM만 사용합니다">LLM only (룰 기반 없음)</span>
       </div>
-
       <div class="row">
         <input id="achInput" type="text" placeholder="오늘의 작은 성취를 적어봐요. 예: 10분 산책" />
         <button class="btn primary" id="addAchBtn">추가</button>
       </div>
-
       <div class="two-col" style="margin-top:10px;">
         <div>
           <button class="btn secondary" id="encourageBtn">격려 받기</button>
@@ -44,11 +40,9 @@
           </select>
         </div>
       </div>
-
       <div class="feedback" id="encourageBox" role="status" aria-live="polite">
         (LLM 설정 후) “격려 받기”를 누르면 결과가 표시돼요.
       </div>
-
       <div class="kpi" aria-label="유지 지표(간단)">
         <div class="box">
           <div class="num" id="kpiCount">0</div>
@@ -63,14 +57,11 @@
           <div class="lab">오늘 기록(Today)</div>
         </div>
       </div>
-
       <div class="hr"></div>
-
       <h2>2) 스트레스 해소법 & 대처 조언</h2>
       <p class="muted small">
         ※ 교육/프로토타입이며 의료/치료 조언이 아닙니다. 증상이 심하거나 오래 지속되면 전문가 도움을 권장합니다.
       </p>
-
       <div class="two-col">
         <div class="panel">
           <b>빠른 도구(Quick Tools)</b>
@@ -86,7 +77,6 @@
           </div>
           <div class="feedback warn" id="tipBox" aria-live="polite">여기에 LLM 팁이 나와요.</div>
         </div>
-
         <div class="panel">
           <b>스트레스 상황별 조언(LLM)</b>
           <p class="muted small" style="margin-top:7px;">
@@ -100,18 +90,14 @@
           <div class="feedback" id="adviceBox" aria-live="polite">여기에 LLM 조언이 표시돼요.</div>
         </div>
       </div>
-
       <div class="hr"></div>
-
       <h2>3) 시나리오 퀴즈(Scenario Quiz) — LLM 판정</h2>
       <p class="muted small">
         정답/해설을 <b>룰 기반 없이</b> LLM이 추천 답(Recommended answer)과 이유를 생성합니다.
       </p>
-
       <div id="quizArea"></div>
       <div class="feedback" id="quizResult" aria-live="polite">선택하면 LLM 피드백이 여기에 나와요.</div>
     </section>
-
     <!-- RIGHT -->
     <aside class="card" aria-label="LLM 설정">
       <h2>LLM 설정(Settings)</h2>
@@ -119,9 +105,7 @@
         <b>권장</b>: 프록시(Proxy) 서버를 두고 호출하세요(토큰 보안 + CORS 해결).<br/>
         빠른 테스트는 Direct(HF)도 가능하지만 환경에 따라 CORS가 막힐 수 있습니다.
       </p>
-
       <div class="hr"></div>
-
       <div class="row">
         <label class="small muted">연결 방식(Mode)</label>
         <select id="modeSelect" aria-label="LLM 연결 방식">
@@ -129,45 +113,30 @@
           <option value="hfDirect">Hugging Face Direct (테스트용)</option>
         </select>
       </div>
-
       <div class="row" style="margin-top:10px;">
         <div>
           <label class="small muted">Proxy URL (예: http://localhost:8000/generate)</label>
           <input id="proxyUrlInput" type="text" placeholder="http://localhost:8000/generate" />
         </div>
       </div>
-
       <div class="row" style="margin-top:10px;">
         <div>
-          <label class="small muted">HF Model Endpoint (Direct 모드 전용)</label>
-          <input id="hfEndpointInput" type="text" placeholder="https://api-inference.huggingface.co/models/ORG/MODEL" />
+          <label class="small muted">Proxy URL (예: http://localhost:8000/generate)</label>
+          <input id="proxyUrlInput" type="text" placeholder="http://localhost:8000/generate" />
         </div>
       </div>
-
-      <div class="row" style="margin-top:10px;">
-        <div>
-          <label class="small muted">HF Token (Direct 모드 전용) <span class="danger-inline">※ 배포용 금지</span></label>
-          <input id="hfTokenInput" type="password" placeholder="hf_..." />
-        </div>
-      </div>
-
       <div class="row" style="margin-top:10px;">
         <button class="btn primary" id="saveCfgBtn">설정 저장</button>
         <button class="btn secondary" id="testCfgBtn">연결 테스트</button>
       </div>
-
       <div class="feedback" id="llmStatusBox">상태: 아직 테스트하지 않았어요.</div>
-
       <div class="hr"></div>
-
       <h2>보안 팁(Security)</h2>
       <ul class="small muted">
         <li>토큰(Token)을 프론트에 넣으면 유출 위험이 큽니다 → <b>프록시(Proxy)</b> 권장</li>
         <li>민감정보(PII)는 입력하지 않도록 안내하세요</li>
       </ul>
-
       <div class="hr"></div>
-
       <h2>긴급 안내</h2>
       <div class="feedback danger">
         지금 매우 위험하거나 즉시 도움이 필요하다면, 가까운 응급 서비스/지역 도움 기관에 연락하세요.
@@ -175,11 +144,9 @@
       </div>
     </aside>
   </main>
-
   <footer>
     <div>© Prototype — “정신: 김은중” (LLM Only)</div>
   </footer>
-
 <script src="EJ_1.js"></script>
 </body>
 </html>
