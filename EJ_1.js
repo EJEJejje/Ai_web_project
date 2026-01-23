@@ -47,15 +47,14 @@ function escapeHTML(s){
 const state = {
   achievements: loadJSON("achievements", []),
   lastActiveDate: loadJSON("lastActiveDate", null),
-  streak: loadJSON("streak", 0),
-  llm: loadJSON("llmConfig", {
-    mode: "proxy",                 // "proxy" | "hfDirect"
-    proxyUrl: "http://localhost:8000/generate",
-    hfEndpoint: "",
-    hfToken: "",
-    temperature: 0.7,
-    max_new_tokens: 1000 // JSON 응답을 위해 토큰 수 늘림
-  })
+  streak: loadJSON("streak", 0)
+};
+
+// LLM 설정 - 항상 서버의 /generate 엔드포인트 사용
+const LLM_CONFIG = {
+  endpoint: "/generate",  // 상대 경로 사용 (같은 서버)
+  temperature: 0.7,
+  max_new_tokens: 1000
 };
 
 // -------------------------
@@ -87,15 +86,6 @@ const adviceBox = document.getElementById("adviceBox");
 
 const quizArea = document.getElementById("quizArea");
 const quizResult = document.getElementById("quizResult");
-
-// Settings UI
-const modeSelect = document.getElementById("modeSelect");
-const proxyUrlInput = document.getElementById("proxyUrlInput");
-// const hfEndpointInput = document.getElementById("hfEndpointInput"); // Removed
-// const hfTokenInput = document.getElementById("hfTokenInput"); // Removed
-const saveCfgBtn = document.getElementById("saveCfgBtn");
-const testCfgBtn = document.getElementById("testCfgBtn");
-const llmStatusBox = document.getElementById("llmStatusBox");
 
 // -------------------------
 // LLM Prompt Builders (생성은 LLM이, 우리는 지시만)
@@ -181,72 +171,30 @@ function promptQuizFeedback(question, choices, pickedIndex){
 }
 
 // -------------------------
-// LLM Call (proxy or HF direct)
+// LLM Call (서버 프록시 사용)
 // -------------------------
 async function callLLMText(promptText){
-  const cfg = state.llm;
-
-  if(cfg.mode === "proxy"){
-    if(!cfg.proxyUrl) throw new Error("Proxy URL이 비어 있습니다.");
-    const res = await fetch(cfg.proxyUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt: promptText,
-        temperature: cfg.temperature,
-        max_new_tokens: cfg.max_new_tokens
-      })
-    });
-    if(!res.ok){
-      const txt = await safeReadText(res);
-      throw new Error(`Proxy 응답 오류: ${res.status} ${txt}`);
-    }
-    const data = await res.json();
-    // 기대: { text: "..." }
-    if(!data || typeof data.text !== "string") throw new Error("Proxy 응답 형식이 올바르지 않습니다. {text:string} 필요");
-    return data.text.trim();
+  const res = await fetch(LLM_CONFIG.endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt: promptText,
+      temperature: LLM_CONFIG.temperature,
+      max_new_tokens: LLM_CONFIG.max_new_tokens
+    })
+  });
+  
+  if(!res.ok){
+    const txt = await safeReadText(res);
+    throw new Error(`서버 응답 오류: ${res.status} ${txt}`);
   }
-
-  if(cfg.mode === "hfDirect"){
-    if(!cfg.hfEndpoint) throw new Error("HF endpoint가 비어 있습니다.");
-    if(!cfg.hfToken) throw new Error("HF token이 비어 있습니다.");
-
-    const res = await fetch(cfg.hfEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${cfg.hfToken}`
-      },
-      body: JSON.stringify({
-        inputs: promptText,
-        parameters: {
-          temperature: cfg.temperature,
-          max_new_tokens: cfg.max_new_tokens,
-          return_full_text: false
-        }
-      })
-    });
-
-    if(!res.ok){
-      const txt = await safeReadText(res);
-      throw new Error(`HF 응답 오류: ${res.status} ${txt}`);
-    }
-
-    // HF Inference API는 모델에 따라 응답 형태가 다를 수 있어 최대한 견고하게 파싱
-    const data = await res.json();
-    // 흔한 형태: [{generated_text:"..."}]
-    if(Array.isArray(data) && data[0]?.generated_text){
-      return String(data[0].generated_text).trim();
-    }
-    // 다른 형태: {generated_text:"..."} 또는 {text:"..."}
-    if(data?.generated_text) return String(data.generated_text).trim();
-    if(data?.text) return String(data.text).trim();
-
-    // 마지막 fallback: JSON stringify
-    return JSON.stringify(data).trim();
+  
+  const data = await res.json();
+  if(!data || typeof data.text !== "string"){
+    throw new Error("서버 응답 형식 오류");
   }
-
-  throw new Error("알 수 없는 LLM 모드입니다.");
+  
+  return data.text.trim();
 }
 
 async function safeReadText(res){
@@ -506,39 +454,7 @@ function renderQuiz(){
   });
 }
 
-// -------------------------
-// Settings UI
-// -------------------------
-function syncSettingsToUI(){
-  modeSelect.value = state.llm.mode;
-  proxyUrlInput.value = state.llm.proxyUrl || "";
-  // hfEndpointInput.value = state.llm.hfEndpoint || "";
-  // hfTokenInput.value = state.llm.hfToken || "";
-}
-function saveSettingsFromUI(){
-  state.llm.mode = modeSelect.value;
-  state.llm.proxyUrl = proxyUrlInput.value.trim();
-  // state.llm.hfEndpoint = hfEndpointInput.value.trim();
-  // state.llm.hfToken = hfTokenInput.value.trim();
-  saveJSON("llmConfig", state.llm);
-}
-
-saveCfgBtn.addEventListener("click", ()=>{
-  saveSettingsFromUI();
-  llmStatusBox.textContent = "상태: 설정 저장 완료.";
-});
-
-testCfgBtn.addEventListener("click", async ()=>{
-  saveSettingsFromUI();
-  llmStatusBox.textContent = "상태: 테스트 중...";
-  try{
-    const testPrompt = "테스트: 한국어로 '연결 성공' 한 문장만 출력해줘.";
-    const out = await callLLMText(testPrompt);
-    llmStatusBox.textContent = "상태: 연결 성공 ✅\n" + out;
-  }catch(err){
-    llmStatusBox.textContent = "상태: 연결 실패 ❌\n" + err.message;
-  }
-});
+// Settings UI 제거됨 - 서버에서 자동으로 처리
 
 // -------------------------
 // Events
@@ -604,8 +520,7 @@ clearAdviceBtn.addEventListener("click", ()=>{
 // -------------------------
 // Init
 // -------------------------
-syncSettingsToUI();
 renderAchievements();
 updateKPIs();
-renderQuiz(); // 빈 상태 혹은 로딩 상태
-loadDailyQuiz(); // 체크 시작
+renderQuiz();
+loadDailyQuiz();

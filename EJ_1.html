@@ -99,45 +99,30 @@
       <div class="feedback" id="quizResult" aria-live="polite">선택하면 LLM 피드백이 여기에 나와요.</div>
     </section>
     <!-- RIGHT -->
-    <aside class="card" aria-label="LLM 설정">
-      <h2>LLM 설정(Settings)</h2>
+    <aside class="card" aria-label="서비스 정보">
+      <h2>💡 서비스 안내</h2>
       <p class="muted small">
-        <b>권장</b>: 프록시(Proxy) 서버를 두고 호출하세요(토큰 보안 + CORS 해결).<br/>
-        빠른 테스트는 Direct(HF)도 가능하지만 환경에 따라 CORS가 막힐 수 있습니다.
+        별도 설정 없이 바로 사용 가능합니다!<br/>
+        왼쪽 기능들을 자유롭게 이용해보세요.
       </p>
       <div class="hr"></div>
-      <div class="row">
-        <label class="small muted">연결 방식(Mode)</label>
-        <select id="modeSelect" aria-label="LLM 연결 방식">
-          <option value="proxy">Proxy (권장)</option>
-          <option value="hfDirect">Hugging Face Direct (테스트용)</option>
-        </select>
-      </div>
-      <div class="row" style="margin-top:10px;">
-        <div>
-          <label class="small muted">Proxy URL (예: http://localhost:8000/generate)</label>
-          <input id="proxyUrlInput" type="text" placeholder="http://localhost:8000/generate" />
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px;">
-        <div>
-          <label class="small muted">Proxy URL (예: http://localhost:8000/generate)</label>
-          <input id="proxyUrlInput" type="text" placeholder="http://localhost:8000/generate" />
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px;">
-        <button class="btn primary" id="saveCfgBtn">설정 저장</button>
-        <button class="btn secondary" id="testCfgBtn">연결 테스트</button>
-      </div>
-      <div class="feedback" id="llmStatusBox">상태: 아직 테스트하지 않았어요.</div>
-      <div class="hr"></div>
-      <h2>보안 팁(Security)</h2>
+      <h2>📝 사용 팁</h2>
       <ul class="small muted">
-        <li>토큰(Token)을 프론트에 넣으면 유출 위험이 큽니다 → <b>프록시(Proxy)</b> 권장</li>
-        <li>민감정보(PII)는 입력하지 않도록 안내하세요</li>
+        <li><b>작은 성취 기록</b>: 오늘 한 일을 간단히 적고 격려를 받아보세요</li>
+        <li><b>격려 톤 변경</b>: 따뜻한, 장난기, 코치 톤 중 선택 가능</li>
+        <li><b>스트레스 해소</b>: 힘든 상황을 적으면 대처 조언을 받을 수 있어요</li>
+        <li><b>시나리오 퀴즈</b>: 일상 스트레스 상황 대처 방법 학습</li>
       </ul>
       <div class="hr"></div>
-      <h2>긴급 안내</h2>
+      <h2>⚠️ 주의사항</h2>
+      <ul class="small muted">
+        <li>이 서비스는 교육/프로토타입 목적입니다</li>
+        <li>의료 진단이나 치료 조언이 아닙니다</li>
+        <li>민감한 개인정보는 입력하지 마세요</li>
+        <li>첫 요청 시 응답이 느릴 수 있습니다 (20-30초)</li>
+      </ul>
+      <div class="hr"></div>
+      <h2>🚨 긴급 안내</h2>
       <div class="feedback danger">
         지금 매우 위험하거나 즉시 도움이 필요하다면, 가까운 응급 서비스/지역 도움 기관에 연락하세요.
         (이 앱은 의료 응급 대응 도구가 아닙니다.)

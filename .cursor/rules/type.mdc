@@ -1,0 +1,212 @@
+---
+name: type
+description: This is a new rule
+---
+
+# Overview
+
+Full-Stack + LLM Service Developer
+Unified Action Guidelines (Debug-First, Maintainability-First)
+1. Core Engineering Philosophy
+Example
+# Good
+def generate_answer(prompt: str) -> str:
+    return llm_client.run(prompt)
+
+# Bad
+def generate_answer(prompt):
+    return model.generate(prompt, temperature=0.7, max_tokens=512)
+
+General Rule
+
+Code should explain intent, not implementation details.
+
+Performance optimization happens after profiling, not before.
+
+Action Guidelines
+
+Prefer clarity over cleverness
+
+Prefer predictable behavior over micro-optimizations
+
+Treat debugging time as the most expensive resource
+
+2. Backend Architecture (FastAPI)
+Example (Minimal & Clean)
+# api/chat.py
+@router.post("/chat")
+async def chat(req: ChatRequest):
+    return chat_service.generate(req)
+
+# services/chat_service.py
+def generate(req: ChatRequest):
+    prompt = prompt_builder.build(req)
+    return llm_client.run(prompt)
+
+General Rule
+
+API layer = HTTP only
+
+Service layer = business logic
+
+No computation inside routers
+
+Action Guidelines
+
+One file, one responsibility
+
+Routers must remain thin
+
+Services must be testable without FastAPI
+
+3. LLM Serving Principles
+Example
+class LLMClient:
+    def run(self, prompt: str) -> str:
+        return self.model.generate(prompt)
+
+General Rule
+
+LLMs are replaceable infrastructure, not core logic.
+
+Action Guidelines
+
+Always wrap models with a client class
+
+Never call the model directly from routers
+
+Assume future model replacement (OpenAI → Local → vLLM)
+
+4. Database Usage Rules
+Example
+def get_user(db: Session, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
+
+General Rule
+
+Queries must be readable without documentation.
+
+Action Guidelines
+
+Avoid ORM magic
+
+Keep feature data separate from transactional data
+
+Use repository pattern for complex queries
+
+5. Frontend / Backend Separation
+Example
+<!-- html/chat.html -->
+<link rel="stylesheet" href="/css/chat.css">
+<script src="/js/chat.js"></script>
+
+// js/chat.js
+async function sendMessage() {
+  await fetch("/api/chat")
+}
+
+General Rule
+
+HTML = structure
+
+CSS = appearance
+
+JS = behavior
+
+Action Guidelines
+
+No HTML generation inside JS
+
+No logic inside CSS
+
+Backend returns JSON only
+
+6. Debug-First Development Strategy
+Example
+logger.info(
+    "chat_request_received",
+    extra={"user_id": req.user_id}
+)
+
+General Rule
+
+If you cannot debug it in production logs, it is not ready.
+
+Action Guidelines
+
+Log all external I/O (DB, LLM, APIs)
+
+Avoid silent exceptions
+
+Prefer explicit errors over defensive try/except
+
+7. ML / DL Knowledge for Service Engineers
+Example
+
+Long input → context window overflow → response degradation
+
+General Rule
+
+You do not need to train models,
+but you must understand model behavior limits.
+
+Action Guidelines
+
+Understand:
+
+Overfitting vs Generalization
+
+Tokens and context windows
+
+Latency vs cost tradeoffs
+
+Implement:
+
+Chunking
+
+Summarization
+
+Caching
+
+8. Performance Philosophy
+Example
+Slow but debuggable > Fast but opaque
+
+General Rule
+
+Measure before optimizing.
+
+Action Guidelines
+
+Add profiling only when needed
+
+Never optimize speculative bottlenecks
+
+Cache only after correctness is guaranteed
+
+9. Project Structure (Recommended)
+backend/
+ ├─ main.py
+ ├─ api/
+ ├─ services/
+ ├─ models/
+ ├─ db/
+ ├─ clients/
+ └─ utils/
+
+frontend/
+ ├─ html/
+ ├─ css/
+ └─ js/
+
+10. Final Engineering Checklist
+
+ Can I trace a request end-to-end via logs?
+
+ Can I replace the LLM without rewriting logic?
+
+ Are frontend and backend completely decoupled?
+
+ Can a new developer understand this in one hour?
+
+ Is debugging easier than optimization?
