@@ -1,0 +1,104 @@
+:root {
+    --official-bg: rgb(20, 140, 160);
+    --official-border: rgba(255, 180, 0, 0.6);
+    --body-bg: #f2f5f7;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--body-bg);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper { width: 100%; max-width: 550px; }
+
+header { text-align: center; margin-bottom: 25px; color: var(--official-bg); }
+header h1 { font-size: 2rem; margin-bottom: 5px; letter-spacing: -1px; }
+
+.card {
+    padding: 16px;
+    background: var(--official-bg);
+    border-radius: 18px;
+    border: 1px solid var(--official-border);
+    color: white;
+    margin-bottom: 20px;
+}
+
+.card h3 { text-align: center; margin-bottom: 20px; font-weight: 500; }
+
+/* 운동 선택 버튼 크기 확대 */
+.exercise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.exercise-item.large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 10px; /* 높이를 키움 */
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.exercise-item .emoji { font-size: 2.2rem; margin-bottom: 10px; }
+.exercise-item .label { font-size: 1rem; font-weight: 600; }
+
+.exercise-item.large:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+.exercise-item.active {
+    background: white;
+    color: var(--official-bg);
+    border-color: var(--official-border);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* 결과창 애니메이션 */
+#recovery-result { display: none; animation: slideIn 0.5s ease forwards; }
+
+.result-header { text-align: center; margin-bottom: 15px; }
+#selected-title { margin: 5px 0; font-size: 1.4rem; }
+
+.info-content {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    color: #333;
+}
+
+.info-item { display: flex; margin-bottom: 18px; }
+.info-item:last-child { margin-bottom: 0; }
+.icon { font-size: 1.4rem; margin-right: 15px; }
+.text-group strong { display: block; color: var(--official-bg); margin-bottom: 4px; }
+.text-group p { margin: 0; font-size: 0.95rem; color: #555; line-height: 1.5; }
+
+.bell-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    background: white;
+    color: var(--official-bg);
+    border: 2px solid var(--official-border);
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}

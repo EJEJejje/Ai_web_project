@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>육체 케어: 정예진</title>
+  <style>
+    /* 기본 배경 설정 */
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #0b1020; /* 전체 페이지 배경 */
+      color: #000000; /* 기본 글자색 검은색 */
+      line-height: 1.5;
+    }
+
+    /* 요청하신 전용 카드 스타일 */
+    .card {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      padding: 16px;
+      background-color: rgb(20, 140, 160); /* 요청 배경색 */
+      border: 1px solid rgba(255, 180, 0, 0.6); /* 요청 테두리색 */
+      border-radius: 14px;
+      box-shadow: none;
+      color: #000000; /* 카드 내 글자 검은색 */
+    }
+
+    header { text-align: center; margin-bottom: 30px; color: #fff; }
+    header h1 { margin: 0; font-size: 24px; }
+    header p { margin: 5px 0; color: #9fb0ffcc; }
+
+    h2 { font-size: 18px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px; }
+
+    .row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    input, textarea, select {
+      flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.9); color: #000;
+    }
+
+    .btn {
+      padding: 10px 15px; border-radius: 8px; border: 1px solid #222;
+      background: #f0f0f0; color: #000; cursor: pointer; font-weight: bold;
+    }
+    .btn:hover { background: #ddd; }
+
+    .feedback {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 12px; border-radius: 10px; margin-top: 10px;
+      min-height: 50px; white-space: pre-wrap; border: 1px dashed #000;
+    }
+
+    .kpi-container { display: flex; gap: 10px; margin-top: 15px; }
+    .kpi-box {
+      flex: 1; text-align: center; padding: 10px; 
+      background: rgba(255, 255, 255, 0.2); border-radius: 10px;
+    }
+    .kpi-box .num { font-size: 20px; font-weight: bold; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    ul { padding-left: 20px; }
+    li { margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>육체: 근골격 & 회복 케어</h1>
+    <p>운동 후 회복 조언 · 자세 교정 · 수면 위생</p>
+  </header>
+
+  <section class="card">
+    <h2>1) 오늘의 운동 및 활동 기록</h2>
+    <p style="font-size: 12px; font-weight: bold;">Physical Recovery</p>
+    <div class="row">
+      <input id="activityInput" type="text" placeholder="오늘 어떤 운동을 하셨나요?" />
+      <button class="btn" onclick="getRecoveryAdvice()">기록</button>
+    </div>
+
+    <div class="row">
+      <button class="btn" onclick="getRecoveryAdvice()">회복 조언 받기</button>
+      <button class="btn" onclick="playChime()">맑은 종소리</button>
+      <select id="focusSelect">
+        <option value="muscle">근육통 집중</option>
+        <option value="posture">자세 교정 집중</option>
+        <option value="fatigue">전신 피로 집중</option>
+      </select>
+    </div>
+
+    <div class="feedback" id="recoveryBox">
+      운동 후 상태를 입력하면 전문적인 회복 루틴을 처방해 드려요.
+    </div>
+
+    <div class="kpi-container">
+      <div class="kpi-box">
+        <div class="num" id="kpiCount">0</div>
+        <div class="lab">누적 활동 기록</div>
+      </div>
+      <div class="kpi-box">
+        <div class="num" id="kpiScore">85</div>
+        <div class="lab">회복 점수(%)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>근골격 관리 & 자세 교정</h2>
+        <div class="grid-2">
+      <div>
+        <p><b>실시간 자세 체크리스트</b></p>
+        <ul>
+          <li>거북목: 귀와 어깨가 수직선상 확인</li>
+          <li>라운드 숄더: 날개뼈를 가볍게 모으기</li>
+          <li>골반: 의자 깊숙이 엉덩이 붙이기</li>
+        </ul>
+        <button class="btn" onclick="randomStretch()">랜덤 스트레칭</button>
+      </div>
+      <div>
+        <p><b>부위별 불편감 조언</b></p>
+        <textarea id="painInput" placeholder="어디가 불편하신가요?"></textarea>
+        <button class="btn" style="margin-top:5px;" onclick="getPainAdvice()">맞춤 조언</button>
+      </div>
+    </div>
+    <div class="feedback" id="statusBox">"몸의 신호에 귀를 기울이는 것이 치유의 시작입니다."</div>
+  </section>
+
+  <section class="card">
+    <h2>수면 위생 & 회복 퀴즈</h2>
+    <p>문제를 풀고 최적의 숙면 환경을 확인하세요!</p>
+    <div id="quizArea">
+      <p><b>Q. 수면 전 스마트폰 사용이 회복에 미치는 영향은?</b></p>
+      <button class="btn" onclick="checkQuiz(true)">블루라이트가 회복을 방해한다</button>
+      <button class="btn" onclick="checkQuiz(false)">상관없다</button>
+    </div>
+    <div class="feedback" id="quizResult">결과가 여기에 표시됩니다.</div>
+  </section>
+
+  <script>
+    let count = 0;
+
+    // 맑은 종소리 함수
+    function playChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const freqs = [880, 1320, 1760];
+        const t0 = audioCtx.currentTime;
+        freqs.forEach((f, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.frequency.setValueAtTime(f, t0);
+          gain.gain.setValueAtTime(0, t0);
+          gain.gain.exponentialRampToValueAtTime(0.2, t0 + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.5);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(t0 + i * 0.02);
+          osc.stop(t0 + 1.5);
+        });
+      } catch(e) { console.log("Audio play blocked"); }
+    }
+
+    // 회복 조언
+    function getRecoveryAdvice() {
+      const input = document.getElementById('activityInput').value;
+      if(!input) return alert("활동을 입력해주세요.");
+      
+      count++;
+      document.getElementById('kpiCount').textContent = count;
+      
+      const advice = `오! 그 방법 되게 나이스한데요? ${input} 활동 후에는 충분한 수분 섭취와 10분간의 가벼운 스트레칭이 최고의 회복법입니다!`;
+      document.getElementById('recoveryBox').textContent = advice;
+      playChime();
+    }
+
+    // 통증 조언
+    function getPainAdvice() {
+      const pain = document.getElementById('painInput').value;
+      const advice = `오! 그 방법 되게 나이스한데요? ${pain} 부위의 긴장을 풀기 위해 4-6 호흡법과 함께 온찜질을 추천드려요.`;
+      document.getElementById('statusBox').textContent = advice;
+      playChime();
+    }
+
+    // 랜덤 스트레칭
+    function randomStretch() {
+      const list = ["목 돌리기 10회", "어깨 으쓱으쓱 15회", "앉은 채로 허리 비틀기"];
+      const pick = list[Math.floor(Math.random() * list.length)];
+      document.getElementById('statusBox').textContent = `추천 스트레칭: ${pick} (오! 그 방법 되게 나이스한데요?)`;
+      playChime();
+    }
+
+    // 퀴즈 체크
+    function checkQuiz(isCorrect) {
+      const res = isCorrect ? 
+        "정답입니다! 오! 그 방법 되게 나이스한데요? 멜라토닌 분비를 위해 취침 1시간 전 폰을 멀리하세요." : 
+        "아쉬워요! 뇌의 휴식이 전신 회복의 핵심입니다.";
+      document.getElementById('quizResult').textContent = res;
+      playChime();
+    }
+  </script>
+</body>
+</html>
