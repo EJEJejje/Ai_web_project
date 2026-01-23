@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>육체 회복 매니저: 정예진</title>
+  <style>
+    :root{
+      --bg:#070b14; --card:#111827; --muted:#94a3b8; --text:#f8fafc;
+      --accent:#10b981; --accent2:#3b82f6; --danger:#ef4444; --warn:#f59e0b;
+      --line:#1f2937; --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #070b14 100%);
+      color: var(--text); line-height:1.6;
+    }
+    header{ padding: 25px 20px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid var(--line); }
+    main{ max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+    .card{ background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; }
+    h2{ font-size: 18px; margin-top: 0; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+    .score-circle{ width: 90px; height: 90px; border-radius: 50%; border: 5px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 10px auto; }
+    
+    select, input, textarea { width: 100%; background: #1f2937; border: 1px solid var(--line); border-radius: 10px; padding: 12px; color: white; margin-bottom: 10px; font-size: 14px; }
+    .btn{ width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 5px; }
+    .btn.sub { background: var(--accent2); }
+    .feedback{ background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); padding: 15px; border-radius: 10px; font-size: 13px; white-space: pre-wrap; margin-top: 10px; }
+    
+    .heatmap{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .body-part{ padding: 10px; background: #1f2937; border: 1px solid var(--line); border-radius: 8px; font-size: 12px; cursor: pointer; text-align: center; transition: 0.2s; }
+    .body-part.active{ background: var(--danger); border-color: #ff8080; }
+    .tag{ display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; background: var(--accent2); margin-bottom: 8px; }
+    .yt-link { color: #ff8080; text-decoration: underline; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="margin:0; font-size:22px;">Physical Recovery Manager</h1>
+  <small style="color:var(--muted)">육체 파트: 정예진 — 운동 후 회복 및 수면 위생 가이드</small>
+</header>
+
+<main>
+  <section class="card">
+    <h2>📊 1. Readiness (회복도)</h2>
+    <div class="score-circle" id="readinessScore">--<span style="font-size:10px; font-weight:400;">점</span></div>
+    <p style="font-size:12px; text-align:center; color:var(--muted)">심박 변이도(HRV)와 컨디션 기반 분석</p>
+    
+    <label class="small">심박 변이도(HRV) 상태는 어떤가요?</label>
+    <select id="hrvLevel">
+      <option value="high">평소보다 높음 (매우 쾌적함)</option>
+      <option value="normal" selected>평소와 비슷함 (무난함)</option>
+      <option value="low">평소보다 낮음 (피곤함)</option>
+      <option value="very_low">매우 낮음 (주의 필요)</option>
+    </select>
+
+    <label class="small">근육 및 신체 피로도는 어떤가요?</label>
+    <select id="soreness">
+      <option value="0">매우 가벼움 (날아갈 것 같음)</option>
+      <option value="1">기분 좋은 뻐근함</option>
+      <option value="2">움직일 때 약간의 통증</option>
+      <option value="3">가만히 있어도 묵직한 통증</option>
+    </select>
+    
+    <button class="btn" onclick="analyzeReadiness()">종합 분석 시작</button>
+    <div class="feedback" id="readinessBox">분석 버튼을 누르면 상태가 표시됩니다.</div>
+  </section>
+
+  <section class="card">
+    <h2>🏃 2. Recovery Prescription</h2>
+    <div id="recoveryStep1">
+      <p style="font-size:13px; color:var(--muted)">Step 1. 오늘 수행한 운동 종류는?</p>
+      <button class="btn sub" onclick="showWorkoutParts('swim')">수영</button>
+      <button class="btn sub" onclick="showWorkoutParts('run')">러닝</button>
+      <button class="btn sub" onclick="showWorkoutParts('gym')">웨이트(헬스)</button>
+    </div>
+
+    <div id="recoveryStep2" style="display:none;">
+      <p style="font-size:13px; color:var(--muted)">Step 2. 집중적으로 사용한 부위는?</p>
+      <select id="partSelect"></select>
+      <button class="btn" onclick="getRecoveryAdvice()">맞춤 스트레칭 받기</button>
+      <button class="btn" style="background:#4b5563" onclick="resetRecovery()">뒤로 가기</button>
+    </div>
+
+    <div class="feedback" id="prescriptionBox" style="display:none;"></div>
+  </section>
+
+  <section class="card">
+    <h2>🌙 3. Sleep Optimization</h2>
+    <div style="font-size:13px;">
+      <label>오늘 운동 강도는?</label>
+      <select id="intensity" onchange="calculateSleep()">
+        <option value="low">저강도 (회복 위주)</option>
+        <option value="mid" selected>중강도 (평소 수준)</option>
+        <option value="high">고강도 (심한 피로)</option>
+      </select>
+      
+      <div class="tag" id="sleepTimeTag" style="background:var(--warn)">권장 수면: 8시간 이상</div>
+      <p><b>전문가 기반 수면 위생 팁:</b></p>
+      <ul style="padding-left:18px; color:var(--muted); font-size:12px;" id="sleepTipsList">
+        <li><b>조도 조절:</b> 취침 1시간 전 빛 노출 차단 <span class="yt-link" onclick="window.open('https://www.youtube.com/results?search_query=수면+블루라이트+영향')">[근거]</span></li>
+        <li><b>온도 조절:</b> 침실 온도 18-20도 유지 <span class="yt-link" onclick="window.open('https://www.youtube.com/results?search_query=수면+최적+온도')">[근거]</span></li>
+        <li><b>카페인 제한:</b> 취침 8시간 전 섭취 중단 <span class="yt-link" onclick="window.open('https://www.youtube.com/results?search_query=카페인+반감기+수면')">[근거]</span></li>
+      </ul>
+      <div class="feedback" id="sleepBox">오! 그 방법 되게 나이스한데요? 오늘은 고강도 훈련을 했으니 근육 성장을 위해 평소보다 1시간 더 수면을 취하세요.</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🥗 4. Nutrition Guide</h2>
+    <div style="font-size:13px;">
+      <p><b>회복을 위한 영양 섭취 정보:</b></p>
+      <div class="feedback">
+        🥤 <b>수분 보충:</b> 운동 중 잃은 체중 1kg당 1.5L 수분 <br>
+        🍗 <b>단백질:</b> 체중당 0.4g (운동 후 즉시)<br>
+        🍌 <b>탄수화물:</b> 근육 글리코겐 재합성을 위해 필수
+      </div>
+      <p style="font-size:11px; color:var(--muted)">※ 운동 완료 후 최대한 빠른 섭취를 권장합니다.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>⚠️ 5. Injury Prevention</h2>
+    <p style="font-size:12px; color:var(--muted)">아픈 부위를 모두 선택하세요.</p>
+    <div class="heatmap">
+      <div class="body-part" onclick="togglePain(this)">목/어깨</div>
+      <div class="body-part" onclick="togglePain(this)">등/허리</div>
+      <div class="body-part" onclick="togglePain(this)">손목/엘보</div>
+      <div class="body-part" onclick="togglePain(this)">골반/고관절</div>
+      <div class="body-part" onclick="togglePain(this)">무릎</div>
+      <div class="body-part" onclick="togglePain(this)">발목/발바닥</div>
+    </div>
+    <input type="text" id="otherPain" placeholder="기타 통증 부위 직접 입력" style="margin-top:10px;">
+    <button class="btn" style="background:var(--danger)" onclick="analyzePain()">통증 케어 솔루션</button>
+    <div class="feedback" id="injuryBox">통증 부위를 선택하면 완화 방법이 표시됩니다.</div>
+  </section>
+</main>
+
+<script>
+// --- 1. Readiness 분석 ---
+function analyzeReadiness() {
+  const hrv = document.getElementById('hrvLevel').value;
+  const sore = parseInt(document.getElementById('soreness').value);
+  const scoreEl = document.getElementById('readinessScore');
+  const box = document.getElementById('readinessBox');
+  
+  let score = 70;
+  if(hrv === 'high') score += 20;
+  if(hrv === 'low') score -= 20;
+  if(hrv === 'very_low') score -= 40;
+  score -= (sore * 15);
+  
+  score = Math.max(0, Math.min(100, score));
+  scoreEl.textContent = score;
+  
+  if(score > 80) {
+    scoreEl.style.borderColor = "var(--accent)";
+    box.textContent = "오! 그 방법 되게 나이스한데요? 현재 신체 회복 상태가 최상입니다. 강력한 훈련이 가능합니다!";
+  } else if(score > 50) {
+    scoreEl.style.borderColor = "var(--warn)";
+    box.textContent = "적절한 상태입니다. 세트 사이 휴식 시간을 30초 더 늘리는 것을 추천합니다.";
+  } else {
+    scoreEl.style.borderColor = "var(--danger)";
+    box.textContent = "주의! 회복이 부족합니다. 오늘은 가벼운 조깅이나 스트레칭으로 신체를 달래주세요.";
+  }
+}
+
+// --- 2. Recovery Prescription 로직 ---
+const workoutData = {
+  swim: ["어깨 가동성", "등 근육 이완", "코어 스트레칭"],
+  run: ["발바닥 근막", "종아리/아킬레스건", "장요근(골반)"],
+  gym: ["대퇴사두근/햄스트링", "흉추(가슴) 가동성", "손목/전완근"]
+};
+
+function showWorkoutParts(type) {
+  const step1 = document.getElementById('recoveryStep1');
+  const step2 = document.getElementById('recoveryStep2');
+  const select = document.getElementById('partSelect');
+  
+  step1.style.display = 'none';
+  step2.style.display = 'block';
+  select.innerHTML = "";
+  
+  workoutData[type].forEach(part => {
+    const opt = document.createElement('option');
+    opt.value = part;
+    opt.textContent = part;
+    select.appendChild(opt);
+  });
+}
+
+function resetRecovery() {
+  document.getElementById('recoveryStep1').style.display = 'block';
+  document.getElementById('recoveryStep2').style.display = 'none';
+  document.getElementById('prescriptionBox').style.display = 'none';
+}
+
+function getRecoveryAdvice() {
+  const part = document.getElementById('partSelect').value;
+  const box = document.getElementById('prescriptionBox');
+  box.style.display = 'block';
+  box.innerHTML = `<b>[${part}]</b> 회복을 위한 처방입니다:\n\n1. 해당 부위를 15초간 3세트 지긋이 늘려주세요.\n2. 관련 유튜브 영상 참고: <span class="yt-link" onclick="window.open('https://www.youtube.com/results?search_query=${part}+스트레칭')">[추천 영상 보기]</span>`;
+}
+
+// --- 3. Sleep Optimization 분석 ---
+function calculateSleep() {
+  const intensity = document.getElementById('intensity').value;
+  const tag = document.getElementById('sleepTimeTag');
+  const box = document.getElementById('sleepBox');
+  
+  if(intensity === 'high') {
+    tag.textContent = "권장 수면: 9시간 이상 (강력 추천)";
+    box.textContent = "고강도 훈련 후엔 평소보다 더 깊고 긴 잠이 필수입니다.";
+  } else if(intensity === 'mid') {
+    tag.textContent = "권장 수면: 7.5~8시간";
+    box.textContent = "적절한 수면 시간을 확보하여 오늘 쌓인 피로를 완전히 씻어내세요.";
+  } else {
+    tag.textContent = "권장 수면: 7시간 이상";
+    box.textContent = "규칙적인 입면 시간을 지키는 것에 집중하세요.";
+  }
+}
+
+// --- 5. Injury Prevention ---
+function togglePain(el) {
+  el.classList.toggle('active');
+}
+
+function analyzePain() {
+  const actives = document.querySelectorAll('.body-part.active');
+  const other = document.getElementById('otherPain').value;
+  const box = document.getElementById('injuryBox');
+  
+  if(actives.length === 0 && !other) {
+    box.textContent = "통증 부위가 없다면 가동성 테스트를 진행해볼까요?";
+    return;
+  }
+  
+  let parts = Array.from(actives).map(el => el.textContent);
+  if(other) parts.push(other);
+  
+  box.innerHTML = ` <b>[${parts.join(', ')}]</b> 통증 케어를 제안합니다:\n\n- 해당 부위 온찜질 15분 권장\n- 무리한 스트레칭보다는 '가동 범위 내' 움직임 유지\n- 관련 유튜브 재활 영상: <span class="yt-link" onclick="window.open('https://www.youtube.com/results?search_query=${parts[0]}+재활+통증+완화')">[재활 가이드 보기]</span>`;
+}
+
+// 초기화
+calculateSleep();
+</script>
+
+</body>
+</html>
