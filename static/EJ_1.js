@@ -93,41 +93,49 @@ const quizResult = document.getElementById("quizResult");
 // -------------------------
 function promptEncourage(ach, tone){
   return [
-    "너는 멘탈 웰니스 코치(mental wellness coach)야.",
-    "자기소개 금지",
-    "아래 사용자의 '작은 성취'에 대해 짧고 따뜻한 격려를 한국어로 작성해줘.",
+    "You must respond ONLY in Korean language. No English or other languages allowed.",
+    "너는 멘탈 웰니스 코치야.",
+    "자기소개 금지. 바로 격려 메시지만 작성.",
+    "아래 사용자의 '작은 성취'에 대해 짧고 따뜻한 격려를 한국어로만 작성해줘.",
     "조건:",
-    
-    "- 3~5문장",
-    "- 톤은 사용자가 고른 tone에 맞게: warm/playful/coach",
-    "- 의료 진단/치료 조언 금지, 위기 대응이 필요해 보이면 '전문가 도움 권장'을 부드럽게 한 줄 추가",
+    "- 반드시 한국어로만 응답 (영어, 일본어, 중국어 등 외국어 절대 사용 금지)",
+    "- 3~5문장으로 간결하게",
+    "- 톤: warm(따뜻), playful(장난기), coach(코치) 중 선택된 톤 사용",
+    "- 의료 진단/치료 조언 금지",
+    "- 같은 내용 반복 금지, 매번 새로운 격려 메시지 작성",
     "",
-    `tone: ${tone}`,
+    `선택된 톤: ${tone}`,
     `작은 성취: "${ach}"`
   ].join("\n");
 }
 
 function promptTip(){
   return [
+    "You must respond ONLY in Korean language. No English or other languages allowed.",
     "너는 멘탈 웰니스 코치야.",
-    "자기소개 금지",
-    "사용자에게 지금 당장 할 수 있는 '스트레스 완화 팁'을 한국어로 1개만 제시해줘.",
+    "자기소개 금지. 바로 팁만 제시.",
+    "사용자에게 지금 당장 할 수 있는 '스트레스 완화 팁'을 한국어로만 1개 제시해줘.",
     "조건:",
-    "- 1~2문장",
+    "- 반드시 한국어로만 응답 (외국어 절대 사용 금지)",
+    "- 1~2문장으로 간결하게",
     "- 과장 금지, 의료 진단/치료 언급 금지",
-    "- 구체적 행동(예: 호흡, 스트레칭, 짧은 정리 등) 위주"
+    "- 구체적 행동 위주 (예: 호흡, 스트레칭, 물 마시기 등)",
+    "- 매번 다른 팁 제시 (이전 팁과 중복 금지)"
   ].join("\n");
 }
 
 function promptAdvice(situation){
   return [
+    "You must respond ONLY in Korean language. No English or other languages allowed.",
     "너는 멘탈 웰니스 코치야.",
-    "자기소개 금지",
-    "사용자의 상황에 대해 안전하고 실용적인 대처 조언을 한국어로 작성해줘.",
+    "자기소개 금지. 바로 조언만 제시.",
+    "사용자의 상황에 대해 안전하고 실용적인 대처 조언을 한국어로만 작성해줘.",
     "조건:",
-    "- 4단계(step)로 번호를 매겨 제시",
-    "- 각 단계는 1~2문장으로 짧게",
-    "- 의료 진단/치료 조언 금지, 위험 신호가 있으면 전문가 도움 권장 1줄",
+    "- 반드시 한국어로만 응답 (외국어 절대 사용 금지)",
+    "- 4단계로 번호를 매겨 제시 (1. 2. 3. 4.)",
+    "- 각 단계는 1~2문장으로 간결하게",
+    "- 의료 진단/치료 조언 금지",
+    "- 위험 신호가 있으면 전문가 도움 권장 1줄 추가",
     "",
     `상황: "${situation}"`
   ].join("\n");
@@ -135,16 +143,17 @@ function promptAdvice(situation){
 
 function promptDailyQuiz(){
   return [
+    "You must respond ONLY in Korean language. No English or other languages allowed.",
     "너는 멘탈 웰니스 코치야.",
-    "자기소개 금지",
     "일상 생활에서 겪을 수 있는 스트레스 상황이나 대인관계 시나리오를 3개 생성하고, 각 상황에 대한 객관식 퀴즈(선택지 3개)를 만들어줘.",
     "조건:",
-    "- 출력은 오직 JSON 포맷이어야 함 (마크다운 코드블록 없이 순수 JSON text)",
+    "- 반드시 한국어로만 작성 (외국어 절대 사용 금지)",
+    "- 출력은 오직 JSON 포맷만 (마크다운 코드블록 없이 순수 JSON text)",
     "- JSON 형식: [ { \"q\": \"지문\", \"a\": [\"선택1\", \"선택2\", \"선택3\"] }, ... ]",
-    "- 문제 3개 필수",
-    "- 한국어 작성",
-    "- 내용은 직장인나 현대인이 겪을법한 일상적인 스트레스 상황",
-    "- 선택지는: 1) 공격적/충동적 반응(안 좋은 예), 2) 건전하고 지혜로운 대처(정답), 3) 회피/무시(좋지 않은 예) 순서 섞어서",
+    "- 문제 정확히 3개",
+    "- 모든 텍스트는 한국어로만",
+    "- 내용: 직장인이나 현대인이 겪을법한 일상적인 스트레스 상황",
+    "- 선택지: 1) 공격적/충동적 반응, 2) 건전하고 지혜로운 대처, 3) 회피/무시 - 순서 섞어서",
     "- 의료적 진단이 필요한 심각한 상황은 제외"
   ].join("\n");
 }
@@ -152,15 +161,16 @@ function promptDailyQuiz(){
 function promptQuizFeedback(question, choices, pickedIndex){
   const choiceLines = choices.map((c, i)=> `${i+1}) ${c}`).join("\n");
   return [
+    "You must respond ONLY in Korean language. No English or other languages allowed.",
     "너는 멘탈 웰니스 코치야.",
-    "자기소개 금지",
-    "아래 시나리오 퀴즈에서 사용자가 고른 선택을 평가하고, 더 도움이 되는 '추천 선택지'를 제시해줘.",
+    "자기소개 금지. 바로 평가만 제시.",
+    "아래 시나리오 퀴즈에서 사용자가 고른 선택을 평가하고, 더 도움이 되는 '추천 선택지'를 한국어로만 제시해줘.",
     "조건:",
-    "- 한국어",
+    "- 반드시 한국어로만 응답 (외국어 절대 사용 금지)",
     "- 출력 형식은 반드시 아래 3줄을 포함:",
     "  1) 사용자의 선택: (번호)",
     "  2) 추천 선택: (번호) — 이유 1~2문장",
-    "  3) 다음 행동 1개: (아주 구체적으로 1문장)",
+    "  3) 다음 행동: (구체적으로 1문장)",
     "- 비난/자책 유도 금지, 과장 금지, 의료 진단/치료 조언 금지",
     "",
     `문제: ${question}`,
@@ -407,7 +417,7 @@ async function generateDailyQuiz(){
     console.error(err);
     quizArea.innerHTML = `
       <div class="feedback danger">
-        퀴즈 생성 실패: ${err.message}<br>
+        <p>퀴즈 생성 실패</p>
         <button class="btn secondary" onclick="loadDailyQuiz()">다시 시도</button>
       </div>
     `;
@@ -443,9 +453,9 @@ function renderQuiz(){
           const prompt = promptQuizFeedback(item.q, item.a, j);
           const text = await callLLMText(prompt);
           quizResult.textContent = text;
-          playChime();
+          playChime();  
         }catch(err){
-          quizResult.textContent = `LLM 호출 실패: ${err.message}`;
+          quizResult.textContent = `LLM 호출 실패`;
         }
       });
       wrap.appendChild(label);
@@ -474,14 +484,29 @@ encourageBtn.addEventListener("click", async ()=>{
     return;
   }
 
+  // 캐시 키 생성 (성취 텍스트 + 톤)
+  const cacheKey = `encourage_${latest}_${tone}`;
+  const cached = localStorage.getItem(cacheKey);
+  
+  // 캐시된 결과가 있으면 재사용
+  if(cached){
+    encourageBox.textContent = cached + "\n\n(이전 격려 메시지)";
+    playChime();
+    return;
+  }
+
   encourageBox.textContent = "LLM 격려 생성 중...";
   try{
     const prompt = promptEncourage(latest, tone);
     const llm = await callLLMText(prompt);
+    
+    // 결과를 캐시에 저장
+    localStorage.setItem(cacheKey, llm);
+    
     encourageBox.textContent = llm;
     playChime();
   }catch(err){
-    encourageBox.textContent = `LLM 호출 실패: ${err.message}`;
+    encourageBox.textContent = `LLM 호출 실패`;
   }
 });
 
@@ -494,7 +519,7 @@ randomTipBtn.addEventListener("click", async ()=>{
     tipBox.textContent = text;
     playChime();
   }catch(err){
-    tipBox.textContent = `LLM 호출 실패: ${err.message}`;
+    tipBox.textContent = `LLM 호출 실패`;
   }
 });
 
@@ -509,7 +534,7 @@ adviceBtn.addEventListener("click", async ()=>{
     adviceBox.textContent = out;
     playChime();
   }catch(err){
-    adviceBox.textContent = `LLM 호출 실패: ${err.message}`;
+    adviceBox.textContent = `LLM 호출 실패`;
   }
 });
 

@@ -4,6 +4,8 @@
 .DS_Store
 Thumbs.db
 
+.main.py    
+
 .vscode/
 !.vscode/settings.json
 !.vscode/extensions.json
@@ -58,3 +60,4 @@ out/
 
 # Server files (not for Git)
 server.py
+run_sever.py 
