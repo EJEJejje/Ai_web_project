@@ -1,4 +1,6 @@
+    /* 기본 색상 설정 */
     :root{
+      
       /* ====== Light Healthcare Theme ====== */
       --bg: #f2fbfb;                 /* page background */
       --text: #0b1b1e;               /* primary text */
@@ -21,7 +23,47 @@
       --radius: 18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
+    /* 기본 색상 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 로고 박스 스타일링 */
+    .logo
+    {
+        display: flex;         /* 요소들을 가로로 나란히 배치 */
+        align-items: center;   /* 세로 중앙 정렬 */
+        gap: 20px;            /* 이미지와 텍스트 사이 간격 */
+        padding: 15px;
+        background-color: var(--bg);   /* mint */
+        border-radius: 12px;   /* 박스 모서리 둥글게 */
+    }
+
+    /* ----------------------------------------- */
+    
+    /* 이미지 박스 스타일링 */
+    .logo img 
+    {
+        object-fit: cover;     /* 박스 크기에 맞춰 이미지가 비율을 유지하며 채워짐 */
+        border-radius: 15px;   /* 이미지 자체도 둥글게 (첨부하신 스크린샷 스타일) */
+        background: linear-gradient(135deg, #5fb2b2, #a5dada); /* 이미지가 없을 때의 배경 */
+    }
+    /* 로고 박스 스타일링 */
+
+    /* ----------------------------------------- */
+
+    /* 헤더 설정 */
+    header{
+      padding: 28px 18px 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1{margin:0; font-size: 22px; letter-spacing: -0.2px;}
+    .subtitle{margin:6px 0 0; color: var(--muted); font-size: 13px;}
+    /* 헤더 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 백그라운드 설정 */
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -33,27 +75,19 @@
       color: var(--text);
       line-height:1.45;
     }
+    /* 백그라운드 설정 */
 
-    header{
-      padding: 28px 18px 10px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .brand{ display:flex; align-items:center; gap:12px; }
-    .logo{
-      width:44px; height:44px; border-radius:14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: var(--shadow);
-    }
-    h1{margin:0; font-size: 22px; letter-spacing: -0.2px;}
-    .subtitle{margin:6px 0 0; color: var(--muted); font-size: 13px;}
-
+    /* ----------------------------------------- */
+   
+    /* 메인 설정 */
     main{
       max-width: 1100px;
       margin: 0 auto;
       padding: 10px 18px 40px;
     }
-
+     
+    /* ----------------------------------------- */
+    
     .grid{
       display:grid;
       grid-template-columns: 1.25fr .75fr;
@@ -62,7 +96,14 @@
     @media (max-width: 980px){
       .grid{grid-template-columns:1fr}
     }
+    /* 오른 쪽 설명 창 설정 */
 
+
+    /* ----------------------------------------- */
+
+
+
+    /* 메인 카드 왼쪽 백그라운드 설정 */
     .card{
       background: var(--card);
       border: 1px solid var(--border2);
@@ -70,12 +111,21 @@
       box-shadow: var(--shadow);
       padding: 16px;
     }
+    /* 메인 카드 왼쪽 백그라운드 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 메인 카드 설정 */
     .card h2{
       margin: 0 0 10px;
       font-size: 16px;
       letter-spacing: -0.2px;
     }
+    /* 메인 카드 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 빠른 도구 - 스트레스 상황별 조언 카드 설정 */
     .panel{
       background: var(--card2);
       border: 1px solid var(--border);
@@ -83,10 +133,11 @@
       padding: 12px;
       box-shadow: none;
     }
+    /* 빠른 도구 - 스트레스 상황별 조언 카드 설정 */
 
-    .row{display:flex; gap:10px; flex-wrap:wrap;}
-    .row > *{flex:1}
+    /* ----------------------------------------- */
 
+    /* 입력창 설정 */
     input, textarea, select{
       width:100%;
       background: var(--input-bg);
@@ -98,7 +149,11 @@
     }
     input::placeholder, textarea::placeholder{ color: rgba(11,27,30,.45); }
     textarea{min-height: 76px; resize: vertical;}
+    /* 입력창 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 버튼 설정 */
     .btn{
       border: 1px solid rgba(31,138,154,.35);
       background: linear-gradient(180deg, rgba(31,138,154,.16), rgba(31,138,154,.10));
@@ -121,28 +176,36 @@
       background: rgba(255,255,255,.70);
       font-weight: 600;
     }
+    /* 버튼 설정 */
 
-    .pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding: 6px 10px;
-      border: 1px solid rgba(255,180,0,.40);
-      border-radius: 999px;
-      color: rgba(11,27,30,.75);
-      font-size: 12px;
-      background: rgba(255,180,0,.08);
-    }
+    /* ----------------------------------------- */
 
+    /* 설명 폰트 설정 */
     .muted{color: var(--muted)}
     .small{font-size: 12px}
     .hr{height:1px; background: rgba(11,27,30,.10); margin: 12px 0;}
+    /* 설명 폰트 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 폰트 크기 설정 */
     ul{margin:10px 0 0; padding: 0 0 0 16px}
     li{margin: 6px 0;}
+    /* 폰트 크기 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 폰트 여백 설정 */
     .ach-list{
       list-style:none; padding:0; margin:10px 0 0;
       display:flex; flex-direction:column; gap:8px;
     }
+    /* 폰트 여백 설정 */
+
+    /* ----------------------------------------- */
+
+    
+    /* 색상 설정 */
     .ach-item{
       padding: 10px 12px;
       border: 1px solid rgba(11,27,30,.12);
@@ -153,6 +216,16 @@
     .ach-item b{font-weight:700}
     .ach-item .time{color: rgba(11,27,30,.55); font-size: 12px; white-space:nowrap}
 
+    /* 색상 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 디스플레이 크기 설정 */
+    .row{display:flex; gap:15px; flex-wrap:wrap;}
+    .row > *{flex:1}
+    /* 디스플레이 크기 설정 */
+
+    /* LLM 톤 그리드 설정 */
     .two-col{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -161,7 +234,11 @@
     @media (max-width: 700px){
       .two-col{grid-template-columns:1fr}
     }
+    /* LLM 톤 그리드 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 피드백 설정 */
     .feedback{
       border:1px solid rgba(31,138,154,.22);
       background: rgba(31,138,154,.07);
@@ -170,6 +247,11 @@
       margin-top: 10px;
       white-space: pre-wrap;
     }
+    /* 피드백 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 경고 설정 */
     .warn{
       border-color: rgba(255,180,0,.35);
       background: rgba(255,180,0,.08);
@@ -178,7 +260,11 @@
       border-color: rgba(217,58,58,.35);
       background: rgba(217,58,58,.08);
     }
+    /* 경고 설정 */
 
+    /* ----------------------------------------- */
+
+    /* KPI 설정 */
     .kpi{
       display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;
     }
@@ -192,7 +278,11 @@
     }
     .kpi .num{font-size: 20px; font-weight:800}
     .kpi .lab{color: rgba(11,27,30,.55); font-size: 12px}
+    /* KPI 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 퀴즈 카드 설정 */
     .quiz-card{
       border:1px solid rgba(11,27,30,.12);
       background: rgba(255,255,255,.75);
@@ -200,6 +290,11 @@
       padding: 12px;
       margin-top: 10px;
     }
+    /* 퀴즈 카드 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 선택 설정 */
     .choice{
       display:flex; gap:8px; align-items:flex-start; margin: 8px 0;
       padding: 10px 10px;
@@ -210,7 +305,11 @@
     }
     .choice:hover{border-color: rgba(255,180,0,.45)}
     .choice input{margin-top: 3px; width:auto}
+    /* 선택 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 푸터 설정 */
     footer{
       max-width: 1100px;
       margin: 0 auto;
@@ -218,8 +317,17 @@
       color: rgba(11,27,30,.55);
       font-size: 12px;
     }
-    .mono{font-family: var(--mono)}
+    /* 푸터 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 모노스페이스 설정 */
+    .mono{font-family: var(--mono)}
+    /* 모노스페이스 설정 */
+
+    /* ----------------------------------------- */
+
+    /* 뱃지 설정 */
     .badge{
       display:inline-block;
       padding: 3px 8px;
@@ -229,8 +337,63 @@
       font-size: 12px;
       color: rgba(11,27,30,.75);
     }
+    /* 뱃지 설정 */
 
+    /* ----------------------------------------- */
+
+    /* 위험 설정 */   
     .danger-inline{
       color: var(--danger);
       font-weight: 700;
     }
+    /* 위험 설정 */
+
+    /* ----------------------------------------- */
+
+    /* CSS: 정적인 텍스트 정보 전달을 위한 스타일 */
+
+.emergency-container {
+  padding: 20px;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+}
+
+.emergency-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.emergency-list li {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* 태그 스타일 */
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  min-width: 65px;
+  text-align: center;
+  margin-right: 15px;
+}
+
+/* 색상 분류 */
+.warning { background-color: #f39c12; }
+.danger_2  { background-color: #cd2310d5; }
+.info    { background-color: #3498db; }
+.health  { background-color: #2ecc71; }
+
+/* 전화번호 텍스트 스타일 (클릭 불가) */
+.phone-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  /* 클릭할 수 없음을 나타내기 위해 커서를 기본형으로 고정 */
+  cursor: default; 
+}
