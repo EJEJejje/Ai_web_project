@@ -1,46 +1,71 @@
 const selects = document.querySelectorAll("select");
-const resultText = document.getElementById("result-text");
-const progressText = document.getElementById("progress-text");
-const summarySection = document.querySelector(".summary");
+const statusIcon = document.querySelector(".status-icon");
+const statusTitle = document.querySelector(".status-title");
+const statusDesc = document.querySelector(".status-desc");
+const statusSub = document.querySelector(".status-sub");
 
 function evaluateVaccinationStatus() {
-  let completedCount = 0;
-  let hasUnvaccinated = false;
+  let total = selects.length;
+  let completed = 0;
+  let unknown = 0;
 
   selects.forEach(select => {
-    if (select.value === "완료") completedCount++;
-    if (select.value === "미접종") hasUnvaccinated = true;
+    const value = select.value;
+
+    if (!value) return;
+
+    if (value === "잘 모르겠음") {
+      unknown++;
+      return;
+    }
+
+    // 접종 완료로 보는 조건들
+    if (
+      value.includes("완료") ||
+      value.includes("접종")
+    ) {
+      completed++;
+    }
   });
 
-  const total = selects.length;
-  const percent = Math.round((completedCount / total) * 100);
+  // 아이콘 색 초기화
+  statusIcon.className = "status-icon";
 
-  // 완료율 표시
-  progressText.textContent = `완료율: ${percent}%`;
+  // 👉 상태 판단
+  if (unknown === total) {
+    statusIcon.classList.add("gray");
+    statusTitle.textContent = "예방접종 정보가 부족합니다.";
+    statusDesc.innerHTML = "접종 이력을 확인해 주세요.";
+    statusSub.textContent = "현재 평가 가능한 항목이 없습니다.";
+    return;
+  }
 
-  // 상태 클래스 초기화
-  summarySection.classList.remove("good", "warn", "danger");
+  const rate = Math.round((completed / total) * 100);
 
-  // 상태 판단
-  if (completedCount === total) {
-    resultText.textContent =
-      "🟢 예방접종 관리 상태가 매우 양호합니다. 잘하고 있어요!";
-    summarySection.classList.add("good");
-  } else if (hasUnvaccinated) {
-    resultText.textContent =
-      "🔴 미접종 항목이 있습니다. 예방접종 관리를 권장합니다.";
-    summarySection.classList.add("danger");
-  } else {
-    resultText.textContent =
-      "🟡 예방접종이 진행 중입니다. 거의 다 왔어요!";
-    summarySection.classList.add("warn");
+  if (rate === 100) {
+    statusIcon.classList.add("green");
+    statusTitle.textContent = "예방접종 관리 상태가 양호합니다";
+    statusDesc.textContent = "현재 기준에서 권장 접종이 완료되었습니다.";
+    statusSub.textContent = `완료율 ${rate}%`;
+  } 
+  else if (rate >= 50) {
+    statusIcon.classList.add("yellow");
+    statusTitle.textContent = "예방접종이 일부 완료되었습니다";
+    statusDesc.textContent = "추가 접종이 필요한 항목이 있습니다.";
+    statusSub.textContent = `완료율 ${rate}%`;
+  } 
+  else {
+    statusIcon.classList.add("red");
+    statusTitle.textContent = "예방접종 관리가 필요합니다";
+    statusDesc.textContent = "미접종 또는 추가 접종이 권장되는 항목이 있습니다.";
+    statusSub.textContent = `완료율 ${rate}%`;
   }
 }
 
-// select 변경 시 재계산
+// 이벤트 연결
 selects.forEach(select => {
   select.addEventListener("change", evaluateVaccinationStatus);
 });
 
-// 페이지 로드 시 최초 1회 계산
+// 최초 1회 실행
 evaluateVaccinationStatus();

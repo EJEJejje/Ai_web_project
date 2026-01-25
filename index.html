@@ -10,8 +10,8 @@
   <div class="container">
     <!-- ===== 헤더 ===== -->
     <header>
-      <h1>💉 예방접종 체크리스트</h1>
-      <p>나의 예방접종 상태를 한눈에 확인하세요</p>
+      <h1>💉 예방접종 체크리스트 💉</h1>
+      <p>나의 예방접종 상태를 한눈에 확인하세요!</p>
     </header>
 
     <!-- ===== 대시보드 (좌: 체크리스트 / 우: 종합상태) ===== -->
@@ -23,18 +23,18 @@
 
           <div class="vaccine-card">
             <span class="vaccine-name">
-              인플루엔자
+              인플루엔자(독감)
               <span class="tooltip">ⓘ
                 <span class="tooltip-text">
-                  매년 유행하는 인플루엔자 예방을 위한 접종입니다.
+                  매년 유행하는 인플루엔자 예방을 위한 접종입니다. 연 1회 권장.
                 </span>
               </span>
             </span>
             <select>
-              <option>미접종</option>
-              <option>1차 완료</option>
-              <option>2차 완료</option>
-              <option>완료</option>
+              <option value="" selected disabled>선택해주세요</option>
+              <option>금년 미접종</option>
+              <option>금년 접종 완료</option>
+              <option>잘 모르겠음</option>
             </select>
           </div>
 
@@ -43,15 +43,17 @@
               코로나19
               <span class="tooltip">ⓘ
                 <span class="tooltip-text">
-                  코로나19 감염 및 중증 진행을 예방하기 위한 예방접종입니다.
+                  코로나19 감염 및 중증 진행을 예방하기 위한 예방접종입니다. 1차/2차 기초 접종. 이후는 선택 추가 접종.
                 </span>
               </span>
             </span>
             <select>
+              <option value="" selected disabled>선택해주세요</option>              
               <option>미접종</option>
-              <option>1차 완료</option>
-              <option>2차 완료</option>
-              <option>완료</option>
+              <option>기초 접종 1차 완료</option>
+              <option>기초 접종 2차 완료</option>
+              <option>추가 접종 완료</option>
+              <option>잘 모르겠음</option>
             </select>
           </div>
 
@@ -60,14 +62,15 @@
               파상풍
               <span class="tooltip">ⓘ
                 <span class="tooltip-text">
-                  상처를 통해 감염되는 파상풍균으로부터 보호하기 위한 예방접종입니다.
+                  (Td/Tdap) 상처를 통해 감염되는 파상풍균으로부터 보호하기 위한 예방접종입니다. 10년에 1회 권장.
                 </span>
               </span>
             </span>
             <select>
-              <option>미접종</option>
-              <option>1차 완료</option>
-              <option>완료</option>
+              <option value="" selected disabled>선택해주세요</option>
+              <option>10년 이내 접종 완료</option>
+              <option>10년 초과</option>
+              <option>잘 모르겠음</option>
             </select>
           </div>
 
@@ -76,16 +79,18 @@
               B형간염
               <span class="tooltip">ⓘ
                 <span class="tooltip-text">
-                  간염 바이러스 감염을 예방하고 만성 간질환을 방지합니다.
+                  간염 바이러스 감염을 예방하고 만성 간질환을 방지합니다. 0/1/6개월에 접종. 항체 미형성 시 추가 접종 권장.
                 </span>
               </span>
             </span>
             <select>
+              <option value="" selected disabled>선택해주세요</option>
               <option>미접종</option>
               <option>1차 완료</option>
               <option>2차 완료</option>
-              <option>3차 완료</option>
-              <option>완료</option>
+              <option>3차 완료(접종완료)</option>
+              <option>항체 미형성</option>
+              <option>잘 모르겠음</option>
             </select>
           </div>
 
@@ -95,9 +100,21 @@
       <!-- 오른쪽 영역 -->
       <div class="side-area">
         <section class="summary">
-          <h2>종합 예방접종 상태</h2>
-          <p id="result-text">아직 평가되지 않았습니다.</p>
-          <p id="progress-text"></p>
+            <h2>종합 예방접종 상태</h2>
+
+            <div class="status-line">
+                <span class="status-icon gray"></span>
+                <span class="status-title">예방접종 정보가 부족합니다</span>
+            </div>
+
+            <p class="status-desc">
+                접종 이력을 확인하거나<br />
+                각 항목을 선택해 주세요.
+            </p>
+
+            <p class="status-sub">
+                현재 평가 가능한 항목이 없습니다.
+            </p>
         </section>
       </div>
 
@@ -107,20 +124,22 @@
     <section class="health-info">
 
       <div class="info-card">
-        <h3>💉 예방접종 후 주의사항</h3>
+        <h3>✋ 예방접종 후 주의사항</h3>
         <ul>
-          <li>접종 부위 통증, 발적, 부기가 일시적으로 발생할 수 있습니다.</li>
-          <li>접종 후 20~30분 정도 의료기관 내에서 관찰하는 것이 권장됩니다.</li>
-          <li>고열, 호흡곤란 등 이상 반응 시 의료기관을 방문하세요.</li>
+          <li>접종 부위 통증, 발적, 부기는 1~2일 내 자연스럽게 호전됩니다.</li>
+          <li>접종 후 20~30분 정도는 의료기관이나 접종 장소에서 상태를 관찰하세요.</li>
+          <li>접종 당일에는 과도한 운동, 음주, 사우나는 피하는 것이 좋습니다.</li>
+          <li>고열, 호흡곤란, 심한 알레르기 반응이 나타나면 즉시 의료기관에 방문하세요.</li>
         </ul>
       </div>
 
       <div class="info-card">
         <h3>🛡 감염병 예방 건강 수칙</h3>
         <ul>
-          <li>손 씻기와 기침 예절을 철저히 합니다.</li>
-          <li>호흡기 증상이 있을 경우 마스크 착용을 권장합니다.</li>
-          <li>외출 후 손 위생을 철저히 합니다.</li>
+          <li>외출 후, 식사 전후에는 손 씻기를 생활화하세요.</li>
+          <li>기침이나 재채기 시에는 옷소매로 가리고, 마스크 착용을 권장합니다.</li>
+          <li>발열·기침 등 호흡기 증상이 있을 경우 외출을 자제하세요.</li>
+          <li>예방접종 일정은 정기적으로 확인하여 누락되지 않도록 합니다.</li>
         </ul>
       </div>
 
