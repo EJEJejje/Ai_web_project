@@ -1,0 +1,220 @@
+/* ===== 1. 기본 설정 (웹페이지 기본 세팅) ===== */
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans KR", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+  background-color: #f4f7f8;
+  color: #333;
+}
+
+/* ===== 2. 전체 컨테이너 (서비스 화면 틀) ===== */
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== 3. 헤더 (제목 영역) ===== */
+header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+header p {
+  margin-top: 8px;
+  color: #666;
+}
+
+/* ===== 4. 예방접종 리스트 (핵심 기능) ===== */
+.vaccination-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vaccine-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fbfc;
+  border: 1px solid #e0e6e8;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.vaccine-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ===== 5. 입력 요소 ===== */
+select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* ===== 6. Tooltip ===== */
+.tooltip {
+  margin-left: 6px;
+  position: relative;
+  cursor: pointer;
+  color: #4a90e2;
+  font-size: 0.85em;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 240px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+/* ===== 7. 공통 카드 스타일 ===== */
+.info-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.info-card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.info-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.info-card li {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+/* ===== 8. 섹션 레이아웃 ===== */
+
+/* 종합 상태 */
+.summary {
+  margin-top: 32px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #eef6f7;
+  text-align: center;
+}
+
+.summary h2 {
+  margin-top: 0;
+}
+
+/* 대시보드 레이아웃 */
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.main-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.side-area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 건강 정보 카드 그리드 */
+.health-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+/* ===== 9. 공공 헬스케어 서비스 ===== */
+.health-service {
+  margin-top: 40px;
+}
+
+.service-desc {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.service-card {
+  background-color: #f9fbfc;
+  border: 1px solid #e0e6e8;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.service-card span {
+  display: block;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.summary.good {
+  background-color: #e8f7f0;
+}
+
+.summary.warn {
+  background-color: #fff6e5;
+}
+
+.summary.danger {
+  background-color: #fdecea;
+}
