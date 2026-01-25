@@ -127,11 +127,11 @@ select {
   width: 100%;
   min-height: calc(64px * 4 + 48px);
 
-  display: flex;                 /* ✅ 추가 */
-  flex-direction: column;        /* ✅ 추가 */
-  align-items: center;           /* ✅ 가로 가운데 */
-  justify-content: center;       /* ✅ 세로 가운데 */
-  text-align: center;            /* ✅ 텍스트 가운데 */
+  display: flex;                 
+  flex-direction: column;      
+  align-items: center;         
+  justify-content: center;     
+  text-align: center;         
 }
 
 .summary h2 {
