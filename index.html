@@ -178,6 +178,31 @@
 
   </div>
 
+    <!-- ===== LLM ===== -->
+    <section class="card llm-card">
+      <h3 class="card-title">💬 예방접종 후 증상, AI가 안내해드립니다!</h3>
+
+      <div class="llm-form">
+        <select id="vaccine-select">
+          <option value="">예방접종 선택</option>
+          <option value="코로나19">코로나19</option>
+          <option value="인플루엔자">인플루엔자</option>
+          <option value="파상풍">파상풍</option>
+          <option value="B형간염">B형간염</option>
+        </select>
+
+        <textarea
+          id="symptom-input"
+          placeholder="접종 후 느끼는 증상을 입력해주세요"
+        ></textarea>
+
+        <button id="ask-btn">안내 받기</button>
+      </div>
+
+      <div id="llm-result"></div>
+    </section>
+
+
   <script src="script.js"></script>
 </body>
 </html>

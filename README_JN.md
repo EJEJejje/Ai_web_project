@@ -1,16 +1,19 @@
 # JN Study Branch
 - 개인 작업 브랜치: JN
 
-## 예방접종 체크리스트 웹
+## 예방접종 이력관리 기반 헬스케어 체크리스트 대시보드
 
 ### 프로젝트 개요
-사용자가 예방접종 상태를 선택하면
-종합 예방접종 상태를 직관적으로 확인할 수 있는 웹 페이지입니다.
+사용자가 예방접종 상태를 선택하고,
+예방접종 후 증상에 대해 AI 기반 안내를 받을 수 있는 웹 서비스입니다.
+프론트엔드(UI)와 FastAPI 백엔드를 분리하여 구성하였으며,
+OpenAI API를 활용해 실제 LLM 기반 증상 안내 기능을 구현했습니다.
 
 ### 사용 기술
-- HTML / CSS / JavaScript
-- FastAPI (Python)
-- OpenAI API (LLM 기반 텍스트 응답)
+- Frontend: HTML, CSS, JavaScript
+- Backend: FastAPI, Pydantic
+- AI / LLM: OpenAI API
+- 기타: REST API, CORS, 환경 변수 관리(.env)
 
 ### 주요 기능
 - 예방접종 항목별 상태 선택
@@ -18,6 +21,8 @@
 - 상태에 따른 색상 아이콘 표시
 - 의료 서비스 톤의 안내 문구 제공
 - LLM 기반 예방접종 후 증상·부작용 안내
+- 보안 설정 : OpenAI API Key는 .env 파일로 분리 관리 /
+           .gitignore를 통해 환경 변수, 서버 파일 GitHub 업로드 제외
 
 ### LLM 기반 예방접종 후 증상 안내
 사용자가 예방접종 종류와 접종 후 나타난 증상을 입력하면  

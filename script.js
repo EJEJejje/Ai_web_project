@@ -69,3 +69,41 @@ selects.forEach(select => {
 
 // 최초 1회 실행
 evaluateVaccinationStatus();
+
+
+// 예방접종 후 증상 · 부작용 안내 (LLM 연결용)
+
+const askBtn = document.getElementById("ask-btn");
+const resultBox = document.getElementById("llm-result");
+
+askBtn.addEventListener("click", async () => {
+  const vaccine = document.getElementById("vaccine-select").value;
+  const symptom = document.getElementById("symptom-input").value;
+
+  if (!vaccine || !symptom) {
+    resultBox.textContent = "예방접종 종류와 증상을 모두 입력해주세요.";
+    return;
+  }
+
+  resultBox.textContent = "안내 내용을 불러오는 중입니다...";
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/symptom-guide", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        vaccine: vaccine,
+        symptom: symptom
+      })
+    });
+
+    const data = await response.json();
+    resultBox.textContent = data.result;
+
+  } catch (error) {
+    resultBox.textContent = "현재 안내 서비스를 이용할 수 없습니다.";
+    console.error(error);
+  }
+});
